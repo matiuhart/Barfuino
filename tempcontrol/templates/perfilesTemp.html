@@ -3,6 +3,7 @@
 
 
 {%block content%}
+	<div class="center-block">
 	<form action="/crearperfil/" method="post">{% csrf_token %}
 		<p>
 
@@ -12,4 +13,5 @@
 
 		<input type="submit" name="submit" value="Crear Perfil">
 	</form>
+	</div>
 {%endblock%}
