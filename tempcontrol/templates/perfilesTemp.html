@@ -3,15 +3,17 @@
 
 
 {%block content%}
-	<div class="center-block">
-	<form action="/crearperfil/" method="post">{% csrf_token %}
-		<p>
-
-		{{ form|bootstrap_horizontal:'col-md-8'}}
-
-		<p>
-
-		<input type="submit" name="submit" value="Crear Perfil">
-	</form>
+<fieldset>
+    <legend>Crear Perfil de Temperatura</legend>
+	<div class="form-horizontal">
+		<form action="/crearperfil/" method="post">{% csrf_token %}
+			<div class="form-group">
+				<div class="col-lg-5">
+					{{ form|bootstrap_horizontal:'col-lg-2'}}
+				</div>
+			</div>
+			<input type="submit" name="submit" value="Crear Perfil">
+		</form>
 	</div>
+</fieldset>
 {%endblock%}

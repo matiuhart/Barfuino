@@ -6,8 +6,10 @@
         <!--
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-        <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>-->
-        <link rel="stylesheet" href="{% static 'tempcontrol/flatly.css' %}">
+        <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="{% static 'tempcontrol/flatly.css' %}">-->
+        <link rel="stylesheet" href="{% static 'tempcontrol/superhero.css' %}">
+
         <link rel="stylesheet" href="{% static 'tempcontrol/barfuino.css' %}">
     </head>
     <body>
@@ -17,15 +19,13 @@
               <li class="active"><a href="/">Inicio</a></li>
               <li><a href="/crearperfil/">Crear Perfil de Temperatura</a></li>
               <li><a href="/procesosActivos/">Procesos Activos</a></li>
-              <li><a href="graficas">Graficas</a></li>
             </ul>
         </nav>
         </div>
         <div class="page-header">
             <h1><a href="/">Barfuino!</a></h1>
         </div>
-        
-        <div class="content container">
+        <div class="container">
             {% block content %}
             {% endblock %}
         </div>
