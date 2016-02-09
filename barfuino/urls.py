@@ -15,7 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from tempcontrol.views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^pruebas/',pruebas),
+    url(r'^crearperfil/',crearPerfTemp),
+    url(r'^$', home),
 ]

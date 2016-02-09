@@ -1,0 +1,25 @@
+{%extends 'base.html'%}
+
+{%block content%}
+	{% for activos in activos %}
+	<table>
+		<tr>
+			<th>Sensor</th>
+			<th>Perfil de Temperatura</th>
+			<th>Fin 1er Fermentado</th>
+			<th>Fin 2do Fermentado</th>
+			<th>Fin Madurador</th>
+			<th>Fin Clarificado</th>
+		</tr>	
+		</tr>
+			<td>{{activos.sensor}}</td>
+			<td>{{activos.temperaturaPerfil}}</td>
+			<td>{{activos.fermentado1Fin}}</td>
+			<td>{{activos.fermentado2Fin}}</td>
+			<td>{{activos.maduradoFin}}</td>
+			<td>{{activos.clarificadoFin}}</td>
+		</tr>
+	</table>
+	
+	{% endfor %}
+{%endblock%}

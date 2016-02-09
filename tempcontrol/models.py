@@ -1,0 +1,84 @@
+from django.db import models
+from django import forms
+from datetime import datetime
+
+
+
+class Fermentadores(models.Model):
+	nombre = models.CharField(max_length=20,unique=True)
+	activo = models.BooleanField(default=False)
+
+
+	def __str__(self):
+		return self.nombre
+
+	class Meta:
+		ordering = ["nombre"]
+		verbose_name_plural = "Fermentadores"
+
+
+class Sensores(models.Model):
+	nombre = models.CharField(max_length=10)
+	fermentador = models.ForeignKey(Fermentadores,default='1')
+	mac = models.CharField(max_length=20,blank=True)
+	activo = models.BooleanField(default=False)
+
+	def __str__(self):
+		return self.nombre
+
+	class Meta:
+		ordering = ["nombre"]
+		verbose_name_plural = "Sensores"
+
+class TemperaturasPerfiles(models.Model):
+	nombre = models.CharField(max_length=20)
+	diasFermentado1 = models.IntegerField(verbose_name='días 1er fermentado')
+	diasFermentado2 = models.IntegerField(verbose_name='días 2do fermentado',default='0')
+	diasMadurado = models.IntegerField(verbose_name='días madurado')
+	diasclarificado = models.IntegerField(verbose_name='días clarificado')	
+	temperaturas = models.CommaSeparatedIntegerField(max_length=9)
+	descripcion = models.CharField(max_length=200,verbose_name='descripción')
+
+	def __str__(self):
+		return self.nombre
+
+	class Meta:
+		ordering = ["nombre"]
+		verbose_name_plural = "Perfiles de Temperatura"
+
+
+class ControlProcesos(models.Model):
+	coccionNum = models.IntegerField(verbose_name='Nro. de cocción',unique=True,blank=True,null=True)
+	fechaInicio = models.DateField(default=datetime.now(),blank=True,null=True,verbose_name='fecha de inicio de proceso')
+	fermentador = models.ForeignKey(Fermentadores)
+	sensor = models.ForeignKey(Sensores)
+	temperaturaPerfil = models.ForeignKey(TemperaturasPerfiles,verbose_name='Perfil de Temperatura')
+	activo = models.BooleanField(default=True)
+	fermentado1Fin = models.DateField(verbose_name='Final 1er Fermentado')
+	fermentado2Fin = models.DateField(verbose_name='Final 2da Fermentado')
+	maduradoFin = models.DateField(verbose_name='Final Madurado')
+	clarificadoFin = models.DateField(verbose_name='Final Clarificado')
+
+	def __unicode__(self):
+		return "%s" %(self.coccionNum)
+
+	class Meta:
+		ordering = ["coccionNum"]
+		verbose_name_plural = "Control de Procesos"
+
+
+class TemperaturasHistorial(models.Model):
+	fermentador = models.ForeignKey(Fermentadores,verbose_name="Fermentador")
+	sensorId = models.ForeignKey(Sensores,verbose_name="sensor")
+	temperatura = models.DecimalField(verbose_name=None, name=None, max_digits=4, decimal_places=2)
+	fechaSensado = models.DateField(verbose_name='fecha de sensado')
+	coccionNumero = models.ForeignKey(ControlProcesos,default='1')
+	
+	class Meta:
+		ordering = ["fermentador"]
+		verbose_name_plural = "Historial de Temperaturas"
+
+
+
+
+
