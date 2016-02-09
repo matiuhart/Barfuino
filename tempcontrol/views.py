@@ -4,15 +4,14 @@ from .forms import *
 from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 
+
 # Create your views here.
-
-
 def hola(request):
 	return render(request,'base.html')
 
 def home(request):
 	activos = ControlProcesos.objects.filter(activo=True)
-	return render(request, 'home.html', {'activos':activos})
+	return render(request, 'home.html', {'activos':activos,'values': [['foo', 32], ['bar', 64], ['baz', 96]]})
 
 def pruebas(request):
 	if request.POST:
@@ -47,3 +46,5 @@ def crearPerfTemp(request):
 def procesosActivos(request):
 	activos = ControlProcesos.objects.filter(activo=True)
 	return render(request, 'activos.html', {'activos':activos})
+
+

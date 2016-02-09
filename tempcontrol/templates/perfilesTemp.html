@@ -6,8 +6,7 @@
 <legend>Crear Perfil de Temperatura</legend>
 <div class="div_forms">	
 	<form class="form-horizontal" action="/crearperfil/" method="post">{% csrf_token %}
-		<fieldset>
-	   		
+		<fieldset>	   		
 			<div class="form-group">
 				<div class="col-lg-5">
 					{{ form|bootstrap_horizontal:'col-lg-2'}}
