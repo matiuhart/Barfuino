@@ -44,3 +44,6 @@ def crearPerfTemp(request):
 	return render_to_response('perfilesTemp.html', args)
 
 
+def procesosActivos(request):
+	activos = ControlProcesos.objects.filter(activo=True)
+	return render(request, 'activos.html', {'activos':activos})

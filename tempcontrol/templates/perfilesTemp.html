@@ -1,10 +1,12 @@
 {%extends 'base.html'%}
+{% load bootstrap %}
+
 
 {%block content%}
 	<form action="/crearperfil/" method="post">{% csrf_token %}
 		<p>
 
-		{{ form.as_p}}
+		{{ form|bootstrap_horizontal:'col-md-8'}}
 
 		<p>
 

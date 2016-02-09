@@ -1,26 +1,5 @@
 {%extends 'base.html'%}
 
 {%block content%}
-	<h4>Procesos en curso</h4>
-	{% for activos in activos %}
-	<table class="table table-striped">
-		<tr>
-			<th>Sensor</th>
-			<th>Perf. Temp</th>
-			<th>Fermentado 1</th>
-			<th>Fermentado 2</th>
-			<th>Madurado</th>
-			<th>Clarificado</th>
-		</tr>	
-		</tr>
-			<td>{{activos.sensor}}</td>
-			<td>{{activos.temperaturaPerfil}}</td>
-			<td>{{activos.fermentado1Fin}}</td>
-			<td>{{activos.fermentado2Fin}}</td>
-			<td>{{activos.maduradoFin}}</td>
-			<td>{{activos.clarificadoFin}}</td>
-		</tr>
-	</table>
-	
-	{% endfor %}
+	Bienvenido a Barfuino!!!		
 {%endblock%}

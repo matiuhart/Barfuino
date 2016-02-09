@@ -20,6 +20,7 @@ from tempcontrol.views import *
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^pruebas/',pruebas),
+    url(r'^procesosActivos/',procesosActivos),
     url(r'^crearperfil/',crearPerfTemp),
     url(r'^$', home),
 ]
