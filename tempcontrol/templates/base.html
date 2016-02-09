@@ -4,24 +4,26 @@
 <html>
     <head>
         <title>Barfuino!</title>
+        <!--
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="{% static 'tempcontrol/blog.css' %}">
+        <link rel="stylesheet" href="{% static 'tempcontrol/barfuino.css' %}">-->
+        <link rel="stylesheet" href="{% static 'tempcontrol/flatly.css' %}">
     </head>
     <body>
-        <div class="page-header">
-            <a href="" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
-            <h1><a href="/">Barfuino!</a></h1>
-        </div>
         <div>               
             <ul class="nav nav-tabs">
               <li class="active"><a href="/">Inicio</a></li>
-              <li><a href="crearperfil/">Crear Perfil de Temperatura</a></li>
+              <li><a href="/crearperfil/">Crear Perfil de Temperatura</a></li>
               <li><a href="#">Procesos Activos</a></li>
               <li><a href="graficas">Graficas</a></li>
             </ul>
         </div>
+        <div class="page-header">
+            <h1><a href="/">Barfuino!</a></h1>
+        </div>
+        
         <div class="content container">
             <div class="row">
                 <div class="col-md-8">

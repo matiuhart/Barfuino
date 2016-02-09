@@ -1,15 +1,16 @@
 {%extends 'base.html'%}
 
 {%block content%}
+	<h4>Procesos en curso</h4>
 	{% for activos in activos %}
-	<table>
+	<table class="table table-striped">
 		<tr>
 			<th>Sensor</th>
-			<th>Perfil de Temperatura</th>
-			<th>Fin 1er Fermentado</th>
-			<th>Fin 2do Fermentado</th>
-			<th>Fin Madurador</th>
-			<th>Fin Clarificado</th>
+			<th>Perf. Temp</th>
+			<th>Fermentado 1</th>
+			<th>Fermentado 2</th>
+			<th>Madurado</th>
+			<th>Clarificado</th>
 		</tr>	
 		</tr>
 			<td>{{activos.sensor}}</td>

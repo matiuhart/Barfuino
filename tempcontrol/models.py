@@ -48,16 +48,16 @@ class TemperaturasPerfiles(models.Model):
 
 
 class ControlProcesos(models.Model):
-	coccionNum = models.IntegerField(verbose_name='Nro. de cocción',unique=True,blank=True,null=True)
-	fechaInicio = models.DateField(default=datetime.now(),blank=True,null=True,verbose_name='fecha de inicio de proceso')
+	coccionNum = models.IntegerField(verbose_name='Nro. cocción',unique=True,blank=True,null=True)
+	fechaInicio = models.DateField(default=datetime.now(),blank=True,null=True,verbose_name='Inicio de proceso')
 	fermentador = models.ForeignKey(Fermentadores)
 	sensor = models.ForeignKey(Sensores)
-	temperaturaPerfil = models.ForeignKey(TemperaturasPerfiles,verbose_name='Perfil de Temperatura')
+	temperaturaPerfil = models.ForeignKey(TemperaturasPerfiles,verbose_name='Perf. Temperatura')
 	activo = models.BooleanField(default=True)
-	fermentado1Fin = models.DateField(verbose_name='Final 1er Fermentado')
-	fermentado2Fin = models.DateField(verbose_name='Final 2da Fermentado')
-	maduradoFin = models.DateField(verbose_name='Final Madurado')
-	clarificadoFin = models.DateField(verbose_name='Final Clarificado')
+	fermentado1Fin = models.DateField(verbose_name='Fermentado 1')
+	fermentado2Fin = models.DateField(verbose_name='Fermentado 2')
+	maduradoFin = models.DateField(verbose_name='Madurado')
+	clarificadoFin = models.DateField(verbose_name='Clarificado')
 
 	def __unicode__(self):
 		return "%s" %(self.coccionNum)
