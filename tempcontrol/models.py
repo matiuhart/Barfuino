@@ -32,10 +32,10 @@ class Sensores(models.Model):
 
 class TemperaturasPerfiles(models.Model):
 	nombre = models.CharField(max_length=20)
-	diasFermentado1 = models.IntegerField(verbose_name='días 1er fermentado')
-	diasFermentado2 = models.IntegerField(verbose_name='días 2do fermentado',default='0')
-	diasMadurado = models.IntegerField(verbose_name='días madurado')
-	diasclarificado = models.IntegerField(verbose_name='días clarificado')	
+	diasFermentado1 = models.IntegerField(verbose_name='días 1er Fermentado')
+	diasFermentado2 = models.IntegerField(verbose_name='días 2do Fermentado',default='0')
+	diasMadurado = models.IntegerField(verbose_name='días Madurado')
+	diasclarificado = models.IntegerField(verbose_name='días Clarificado')	
 	temperaturas = models.CommaSeparatedIntegerField(max_length=9)
 	descripcion = models.CharField(max_length=200,verbose_name='descripción')
 

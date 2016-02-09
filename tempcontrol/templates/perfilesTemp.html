@@ -3,17 +3,18 @@
 
 
 {%block content%}
-<fieldset>
-    <legend>Crear Perfil de Temperatura</legend>
-	<div class="form-horizontal">
-		<form action="/crearperfil/" method="post">{% csrf_token %}
+<legend>Crear Perfil de Temperatura</legend>
+<div class="div_forms">	
+	<form class="form-horizontal" action="/crearperfil/" method="post">{% csrf_token %}
+		<fieldset>
+	   		
 			<div class="form-group">
 				<div class="col-lg-5">
 					{{ form|bootstrap_horizontal:'col-lg-2'}}
 				</div>
 			</div>
 			<input type="submit" name="submit" value="Crear Perfil">
-		</form>
-	</div>
-</fieldset>
+		</fieldset>
+	</form>
+</div>
 {%endblock%}
