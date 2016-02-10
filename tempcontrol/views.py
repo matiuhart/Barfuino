@@ -3,6 +3,8 @@ from .models import *
 from .forms import *
 from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
+from datetime import datetime
+from datetime import timedelta
 
 
 # Create your views here.
@@ -45,6 +47,10 @@ def crearPerfTemp(request):
 
 
 def aplicarPerfilTemp(request):
+	def sumar_dias(dias=0):
+		fecha = datetime.now() + timedelta(days=dias)
+		nueva_fecha = fecha.strftime("%Y-%m-%d %H:%M:%S")
+		return nueva_fecha
 	perfiles = TemperaturasPerfiles.objects.all()
 	fermentadores = Fermentadores.objects.filter(activo=False)
 	error = ""
@@ -57,6 +63,15 @@ def aplicarPerfilTemp(request):
 			else:
 				perfilTablas = TemperaturasPerfiles.objects.get(nombre=perfilNombre)
 				fermentadorTablas = Fermentadores.objects.get(nombre=fermentadorNombre)
+				finFermentado1 = sumar_dias(perfilTablas.diasFermentado1)
+				finFermentado2 = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2)
+				finMadurado = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2 + perfilTablas.diasMadurado)
+				finClarificado = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2 + 
+					perfilTablas.diasMadurado + perfilTablas.diasclarificado)
+
+				ControlProceso = ControlProceso(coccionNum=30,fechaInicio=datetime.now(),fermentador=fermentadorTablas.pk,
+					sensor=,temperaturaPerfil=,activo=,fermentado1Fin=,fermentado2Fin=,maduradoFin=,clarificadoFin=)
+
 
 				return render_to_response('aplicarperfil.html', {'pTablas':perfilTablas,'fTablas':fermentadorTablas,
 					'perfil':perfilNombre,'fermentador':fermentadorNombre,'error':error})
@@ -71,11 +86,14 @@ def procesosActivos(request):
 	activos = ControlProcesos.objects.filter(activo=True)
 	return render(request, 'activos.html', {'activos':activos})
 
-
-	
-
-
 '''
+def sumar_dias(dias=0):
+    fecha = datetime.now() + timedelta(days=dias)
+    nueva_fecha = fecha.strftime("%Y-%m-%d %H:%M:%S")
+    return nueva_fecha	
+
+
+
 def aplicarPerfilTemp(request):
 	perfiles = TemperaturasPerfiles.objects.all()
 	fermentadores = Fermentadores.objects.filter(activo=False)
