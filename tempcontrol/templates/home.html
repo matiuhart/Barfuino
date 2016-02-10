@@ -9,12 +9,10 @@
 		  <button type="button" class="btn btn-default btn-lg">Fermentador 3 <br>16°</button>
 		  <button type="button" class="btn btn-default btn-lg">Fermentador 4 <br>18°</button>
 		  <button type="button" class="btn btn-default btn-lg">Fermentador 5 <br>22°</button>
-		  <button type="button" class="btn btn-default btn-lg">Fermentador 6 <br>22°</button>
+		  
 		</p>
 		
-		</script>
 		<div class="main-chart-div">
-		
 				{% load googlecharts %}
 				{# container #}
 				<div id="out"></div>
@@ -29,8 +27,8 @@
 				    {% options "out_options" %}
 				        kind: "LineChart",
 				        options: {
-				            width: 100em,
-				            height: 30em
+				            width: 1000,
+				            height: 360
 				        }
 				    {% endoptions %}
 				    {# chart is assembled from container, data and options #}

@@ -9,6 +9,9 @@
 		<fieldset>
 			<div class="form-group">
 				<div class="col-lg-10">
+					<label for="coccion">Nro. Cocción</label>
+					<input name=coccion type="text" class="form-control" id="inputText" placeholder="55">
+					<br>
 					<label for="perfil">Perfil</label>
 					<select name="perfil" class="form-control" id="select">
 						{% for perfiles in perfiles%}
@@ -32,7 +35,12 @@
 			</div>
 		</fieldset>
 	</form>
-	{%if perfil and not error%}
+	
+</div>
+{%endblock%}
+
+# PARA PRUEBAS
+{%if perfil and not error%}
 		<p>El perfil seleccionado es:</p>
 		<p>{{ perfil }}</p>
 		<p>El fermentador seleccionado es:</p>
@@ -47,7 +55,3 @@
 	{%if error%}
 		{{error}}
 	{%endif%}
-</div>
-{%endblock%}
-
-

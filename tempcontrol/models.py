@@ -48,15 +48,16 @@ class TemperaturasPerfiles(models.Model):
 
 class ControlProcesos(models.Model):
 	coccionNum = models.IntegerField(verbose_name='Nro. cocción',unique=True,blank=True,null=True)
-	fechaInicio = models.DateField(blank=True,null=True,verbose_name='Inicio de proceso')
+	fechaInicio = models.DateTimeField(blank=True,null=True,verbose_name='Inicio de proceso')
 	fermentador = models.ForeignKey(Fermentadores)
 	sensor = models.ForeignKey(Sensores)
 	temperaturaPerfil = models.ForeignKey(TemperaturasPerfiles,verbose_name='Perf. Temperatura')
 	activo = models.BooleanField(default=True)
-	fermentado1Fin = models.DateField(verbose_name='Fermentado 1')
-	fermentado2Fin = models.DateField(verbose_name='Fermentado 2')
-	maduradoFin = models.DateField(verbose_name='Madurado')
-	clarificadoFin = models.DateField(verbose_name='Clarificado')
+	fermentado1Fin = models.DateTimeField(verbose_name='Fermentado 1',blank=True, null=True)
+	fermentado2Fin = models.DateTimeField(verbose_name='Fermentado 2',blank=True, null=True)
+	maduradoFin = models.DateTimeField(verbose_name='Madurado',blank=True, null=True)
+	clarificadoFin = models.DateTimeField(verbose_name='Clarificado',blank=True, null=True)
+
 
 	def __unicode__(self):
 		return "%s" %(self.coccionNum)
@@ -70,7 +71,7 @@ class TemperaturasHistorial(models.Model):
 	fermentador = models.ForeignKey(Fermentadores,verbose_name="Fermentador")
 	sensorId = models.ForeignKey(Sensores,verbose_name="sensor")
 	temperatura = models.DecimalField(verbose_name=None, name=None, max_digits=4, decimal_places=2)
-	fechaSensado = models.DateField(verbose_name='fecha de sensado')
+	fechaSensado = models.DateTimeField(verbose_name='fecha de sensado',blank=True, null=True)
 	coccionNumero = models.ForeignKey(ControlProcesos,default='1')
 	
 	class Meta:

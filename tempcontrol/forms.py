@@ -30,12 +30,12 @@ class PerfilesTempCrearForm(forms.ModelForm):
 class PerfilTempForm(forms.ModelForm):
 	class Meta:
 		model = TemperaturasPerfiles
-		fields = ('nombre',)
+		fields = ('nombre','diasclarificado')
 
 class FermentadorForm(forms.ModelForm):
 	class Meta:
 		model = Fermentadores
-		fields = ('nombre',)
+		fields = ('id','nombre',)
 
 
 	
