@@ -2,26 +2,26 @@
 
 {%block content%}
 	<legend>Procesos en Curso</legend>
-	<table class="table table-striped">
-		<tr>
-			<th>Sensor</th>
-			<th>Perfil de Temperatura</th>
-			<th>Fin de 1er Fermentado</th>
-			<th>Fin de 2do Fermentado</th>
-			<th>Fin de Madurado</th>
-			<th>Fin de Clarificado</th>
-		</tr>
-		{% for activos in activos %}	
-		</tr>
-			<td>{{activos.sensor}}</td>
-			<td>{{activos.temperaturaPerfil}}</td>
-			<td>{{activos.fermentado1Fin}}</td>
-			<td>{{activos.fermentado2Fin}}</td>
-			<td>{{activos.maduradoFin}}</td>
-			<td>{{activos.clarificadoFin}}</td>
-		</tr>
-		{% endfor %}
-	</table>
-	
-		
+	<div class="jumbotron">
+		<table class="table table-striped table-hover">
+			<tr>
+				<th>Sensor</th>
+				<th>Perfil de Temperatura</th>
+				<th>Fin de 1er Fermentado</th>
+				<th>Fin de 2do Fermentado</th>
+				<th>Fin de Madurado</th>
+				<th>Fin de Clarificado</th>
+			</tr>
+			{% for activos in activos %}	
+			</tr>
+				<td>{{activos.sensor}}</td>
+				<td>{{activos.temperaturaPerfil}}</td>
+				<td>{{activos.fermentado1Fin}}</td>
+				<td>{{activos.fermentado2Fin}}</td>
+				<td>{{activos.maduradoFin}}</td>
+				<td>{{activos.clarificadoFin}}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
 {%endblock%}

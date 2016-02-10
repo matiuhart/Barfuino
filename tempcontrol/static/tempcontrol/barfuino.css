@@ -4,3 +4,12 @@
 	width: 100%;
 	padding: 1em 1em 1em 1em;
 }
+
+.main-chart-div  {
+	min-height:500px;
+	height: 100%;
+	width: 100%;
+	margin:auto;
+	background:#fff;
+	text-align:center}
+

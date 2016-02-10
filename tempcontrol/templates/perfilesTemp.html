@@ -4,7 +4,7 @@
 
 {%block content%}
 <legend>Crear Perfil de Temperatura</legend>
-<div class="div_forms">	
+<div class="jumbotron">
 	<form class="form-horizontal" action="/crearperfil/" method="post">{% csrf_token %}
 		<fieldset>	   		
 			<div class="form-group">
@@ -19,4 +19,5 @@
 		</fieldset>
 	</form>
 </div>
+
 {%endblock%}
