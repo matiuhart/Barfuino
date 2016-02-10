@@ -68,9 +68,10 @@ def aplicarPerfilTemp(request):
 				finMadurado = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2 + perfilTablas.diasMadurado)
 				finClarificado = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2 + 
 					perfilTablas.diasMadurado + perfilTablas.diasclarificado)
-
-				ControlProceso = ControlProceso(coccionNum=30,fechaInicio=datetime.now(),fermentador=fermentadorTablas.pk,
-					sensor=,temperaturaPerfil=,activo=,fermentado1Fin=,fermentado2Fin=,maduradoFin=,clarificadoFin=)
+				
+				controlProceso = ControlProcesos(coccionNum=30,fechaInicio=datetime.now(),activo=True,fermentado1Fin=finFermentado1,
+					fermentado2Fin=finFermentado2,maduradoFin=finMadurado,clarificadoFin=finClarificado)
+				controlProceso.save()
 
 
 				return render_to_response('aplicarperfil.html', {'pTablas':perfilTablas,'fTablas':fermentadorTablas,
@@ -86,7 +87,22 @@ def procesosActivos(request):
 	activos = ControlProcesos.objects.filter(activo=True)
 	return render(request, 'activos.html', {'activos':activos})
 
+
+
+
+
+
+
+
 '''
+# CAMPOS PARA INSERSION DE UN NUEVO ControlProcesos
+controlProceso = ControlProcesos(coccionNum=30,fechaInicio=datetime.now(),fermentador=fermentadorTablas.id,
+					sensor=fermentadorTablas.sensor.id,temperaturaPerfil=perfilTablas.id,activo=True,fermentado1Fin=finFermentado1,
+					fermentado2Fin=finFermentado2,maduradoFin=finMadurado,clarificadoFin=finClarificado)
+
+
+
+
 def sumar_dias(dias=0):
     fecha = datetime.now() + timedelta(days=dias)
     nueva_fecha = fecha.strftime("%Y-%m-%d %H:%M:%S")

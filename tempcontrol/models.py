@@ -2,24 +2,9 @@ from django.db import models
 from django import forms
 from datetime import datetime
 
-
-
-class Fermentadores(models.Model):
-	nombre = models.CharField(max_length=20,unique=True)
-	activo = models.BooleanField(default=False)
-
-
-	def __str__(self):
-		return self.nombre
-
-	class Meta:
-		ordering = ["nombre"]
-		verbose_name_plural = "Fermentadores"
-
-
 class Sensores(models.Model):
 	nombre = models.CharField(max_length=10)
-	fermentador = models.ForeignKey(Fermentadores,default='1')
+	#fermentador = models.ForeignKey(Fermentadores,default='1')
 	mac = models.CharField(max_length=20,blank=True)
 	activo = models.BooleanField(default=False)
 
@@ -29,6 +14,20 @@ class Sensores(models.Model):
 	class Meta:
 		ordering = ["nombre"]
 		verbose_name_plural = "Sensores"
+
+class Fermentadores(models.Model):
+	nombre = models.CharField(max_length=20,unique=True)
+	activo = models.BooleanField(default=False)
+	sensor = models.ForeignKey(Sensores,default='1')
+
+
+	def __str__(self):
+		return self.nombre
+
+	class Meta:
+		ordering = ["nombre"]
+		verbose_name_plural = "Fermentadores"
+
 
 class TemperaturasPerfiles(models.Model):
 	nombre = models.CharField(max_length=20)
@@ -49,7 +48,7 @@ class TemperaturasPerfiles(models.Model):
 
 class ControlProcesos(models.Model):
 	coccionNum = models.IntegerField(verbose_name='Nro. cocción',unique=True,blank=True,null=True)
-	fechaInicio = models.DateField(default=datetime.now(),blank=True,null=True,verbose_name='Inicio de proceso')
+	fechaInicio = models.DateField(blank=True,null=True,verbose_name='Inicio de proceso')
 	fermentador = models.ForeignKey(Fermentadores)
 	sensor = models.ForeignKey(Sensores)
 	temperaturaPerfil = models.ForeignKey(TemperaturasPerfiles,verbose_name='Perf. Temperatura')

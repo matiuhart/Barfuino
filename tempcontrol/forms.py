@@ -18,7 +18,7 @@ class ControlPocesosCrearForm(forms.ModelForm):
 class SensoresCrearFormm(forms.ModelForm):
 	class Meta:
 		model = Sensores
-		fields = ('nombre','fermentador','mac','activo')
+		fields = ('nombre','mac','activo')
 
 class PerfilesTempCrearForm(forms.ModelForm):
 	class Meta:

@@ -13,10 +13,10 @@ class FermentadoresAdmin(admin.ModelAdmin):
 
 
 class SensoresAdmin(admin.ModelAdmin):
-	list_display = ('nombre','fermentador','mac','activo') # Autores redefinida en modelo por se ManyToMany
-	list_filter = ('nombre','fermentador','activo')
+	list_display = ('nombre','mac','activo') # Autores redefinida en modelo por se ManyToMany
+	list_filter = ('nombre','activo')
 	ordering = ('nombre',)
-	fields = ('nombre','fermentador','mac','activo') #Cambia orden y campos mostrados en edicion
+	fields = ('nombre','mac','activo') #Cambia orden y campos mostrados en edicion
 	#filter_horizontal = ('autores',) # Solo trabajan con campos ManyToMany
 	#filter_vertical = ('autores',)
 	#raw_id_fields = ('fermentador',) # Seleccion con id
