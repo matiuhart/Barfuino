@@ -15,14 +15,10 @@ class ControlPocesosCrearForm(forms.ModelForm):
 		fields = ('fechaInicio','fermentador','sensor',
 			'temperaturaPerfil','activo','fermentado1Fin','fermentado2Fin','maduradoFin','clarificadoFin')
 
-
-
 class SensoresCrearFormm(forms.ModelForm):
 	class Meta:
 		model = Sensores
 		fields = ('nombre','fermentador','mac','activo')
-
-
 
 class PerfilesTempCrearForm(forms.ModelForm):
 	class Meta:
@@ -31,6 +27,15 @@ class PerfilesTempCrearForm(forms.ModelForm):
 			'diasMadurado','diasclarificado','temperaturas','descripcion')
 
 
+class PerfilTempForm(forms.ModelForm):
+	class Meta:
+		model = TemperaturasPerfiles
+		fields = ('nombre',)
+
+class FermentadorForm(forms.ModelForm):
+	class Meta:
+		model = Fermentadores
+		fields = ('nombre',)
 
 
 	
