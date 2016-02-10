@@ -35,7 +35,11 @@
 			</div>
 		</fieldset>
 	</form>
-	
+	{%if not error and perfiles.nombre%}
+	<div class="alert alert-dismissible alert-success">
+  		<strong>Se ha aplicado el perfil con éxito</strong>
+	</div>
+	{%endif%}	
 </div>
 {%endblock%}
 

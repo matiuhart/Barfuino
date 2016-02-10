@@ -23,6 +23,6 @@ urlpatterns = [
     url(r'^pruebas/',pruebas),
     url(r'^procesosActivos/',procesosActivos),
     url(r'^crearperfil/',crearPerfTemp),
-    url(r'^apicarperfil/',aplicarPerfilTemp),
+    url(r'^aplicarperfil/',aplicarPerfilTemp),
     url(r'^$', home),
 ]

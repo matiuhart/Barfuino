@@ -5,17 +5,97 @@ from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 from datetime import datetime
 from datetime import timedelta
+import time
 
-
-# Create your views here.
-def hola(request):
-	return render(request,'base.html')
-
+# Vista para el home
 def home(request):
+	
+	return render(request, 'home.html', {'values': [['foo', 32], ['bar', 64], ['baz', 96]]})
+
+
+# Vista para crear perfil de temperatura
+def crearPerfTemp(request):
+	if request.POST:
+		form = PerfilesTempCrearForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect('home.html')
+	else:
+		form = PerfilesTempCrearForm()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+
+	return render_to_response('perfilesTemp.html', args)
+
+
+# Vista para visualizar procesos en curso
+def procesosActivos(request):
 	activos = ControlProcesos.objects.filter(activo=True)
-	return render(request, 'home.html', {'activos':activos,'values': [['foo', 32], ['bar', 64], ['baz', 96]]})
+	return render(request, 'activos.html', {'activos':activos})
 
 
+# Vista para aplicar perfil de temperatura
+def aplicarPerfilTemp(request):
+	
+	# Funcion para calculo de dias
+	def sumar_dias(dias=0):
+		fecha = datetime.now() + timedelta(days=dias)
+		nueva_fecha = fecha.strftime("%Y-%m-%d %H:%M:%S")
+		return nueva_fecha
+	
+	perfiles = TemperaturasPerfiles.objects.all()
+	fermentadores = Fermentadores.objects.filter(activo=False)
+	error = ""
+	# Siel metodo es GET y contiene datos, los recupero y realizo la insersion a BD
+	if request.method == 'GET':
+		
+		if 'perfil' in request.GET and 'fermentador' in request.GET and 'coccion' in request.GET:
+			perfilNombre = request.GET['perfil']
+			fermentadorNombre = request.GET['fermentador']
+			coccionNumero = request.GET['coccion']
+			
+			if (not fermentadorNombre) and (not fermentadorNombre) and (not coccionNumero):
+				error = "Error!!Verificá que no falten datos a ingresar"
+			else:
+				perfilTablas = TemperaturasPerfiles.objects.get(nombre=perfilNombre)
+				fermentadorTablas = Fermentadores.objects.get(nombre=fermentadorNombre)
+				
+				# Calculo las fechas de finalizado de cada fase en base a dias especificados en TemperaturasPerfiles
+				finFermentado1 = sumar_dias(perfilTablas.diasFermentado1)
+				finFermentado2 = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2)
+				finMadurado = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2 + perfilTablas.diasMadurado)
+				finClarificado = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2 + 
+					perfilTablas.diasMadurado + perfilTablas.diasclarificado)
+
+				#Instancio para insersion
+				s=Sensores.objects.get(id=fermentadorTablas.sensor.id)
+				f=Fermentadores.objects.get(id=fermentadorTablas.id)
+				p=TemperaturasPerfiles.objects.get(id=perfilTablas.id)
+
+				#TODO!!!
+				#Actualizo Fermentadores.activo a True para que no sea mostrado nuevamente
+				#a = Fermentadores(id=fermentadorTablas.id,nombre=fermentadorTablas.nombre,activo=True)
+				#a.save()
+				
+
+
+				# Inserto los datos para nuevo proceso en ControlProcesos
+				ControlProcesos.objects.create(coccionNum=coccionNumero,fechaInicio=datetime.now(),fermentador=f,
+					sensor=s,temperaturaPerfil=p,activo=True,fermentado1Fin=finFermentado1,
+					fermentado2Fin=finFermentado2,maduradoFin=finMadurado,clarificadoFin=finClarificado)
+
+				return HttpResponseRedirect('/')
+							
+		else:
+			args = {}
+			args['perfiles'] = perfiles
+			args['fermentadores'] = fermentadores
+			
+			return render_to_response('aplicarperfil.html', args)
+		
+
+# Vista para pruebas	
 def pruebas(request):
 	if request.POST:
 		perfilForm = PerfilTempForm(request.POST)
@@ -37,116 +117,9 @@ def pruebas(request):
 	return render_to_response('pruebas.html', args)
 
 
-def crearPerfTemp(request):
-	if request.POST:
-		form = PerfilesTempCrearForm(request.POST)
-		if form.is_valid():
-			form.save()
-			return HttpResponseRedirect('home.html')
-	else:
-		form = PerfilesTempCrearForm()
-	args = {}
-	args.update(csrf(request))
-	args['form'] = form
-
-	return render_to_response('perfilesTemp.html', args)
-
-
-def procesosActivos(request):
-	activos = ControlProcesos.objects.filter(activo=True)
-	return render(request, 'activos.html', {'activos':activos})
-
-
-
-def aplicarPerfilTemp(request):
-	def sumar_dias(dias=0):
-		fecha = datetime.now() + timedelta(days=dias)
-		nueva_fecha = fecha.strftime("%Y-%m-%d %H:%M:%S")
-		return nueva_fecha
-	perfiles = TemperaturasPerfiles.objects.all()
-	fermentadores = Fermentadores.objects.filter(activo=False)
-	error = ""
-	if request.method == 'GET':
-		if 'perfil' in request.GET and 'fermentador' in request.GET and 'coccion' in request.GET:
-			perfilNombre = request.GET['perfil']
-			fermentadorNombre = request.GET['fermentador']
-			coccionNumero = request.GET['coccion']
-			if (not fermentadorNombre) and (not fermentadorNombre) and (not coccionNumero):
-				error = "Error!!Verificá que no falten datos a ingresar"
-			else:
-				perfilTablas = TemperaturasPerfiles.objects.get(nombre=perfilNombre)
-				fermentadorTablas = Fermentadores.objects.get(nombre=fermentadorNombre)
-				
-				finFermentado1 = sumar_dias(perfilTablas.diasFermentado1)
-				finFermentado2 = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2)
-				finMadurado = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2 + perfilTablas.diasMadurado)
-				finClarificado = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2 + 
-					perfilTablas.diasMadurado + perfilTablas.diasclarificado)
-
-				s=Sensores.objects.get(id=fermentadorTablas.sensor.id)
-				f=Fermentadores.objects.get(id=fermentadorTablas.id)
-				p=TemperaturasPerfiles.objects.get(id=perfilTablas.id)
-
-				#Actualizo Fermentadores.activo a True para que no sea mostrado nuevamente REVISARRRR PORQUE NO ACTUALIZA SOLO EL CAMPO activo!!!!!!
-				a = Fermentadores(id=fermentadorTablas.id,nombre=fermentadorTablas.nombre,activo=True)
-				a.save()
-
-
-				# Inserto los datos para nuevo proceso en ControlProcesos
-				ControlProcesos.objects.create(coccionNum=coccionNumero,fechaInicio=datetime.now(),fermentador=f,
-					sensor=s,temperaturaPerfil=p,activo=True,fermentado1Fin=finFermentado1,
-					fermentado2Fin=finFermentado2,maduradoFin=finMadurado,clarificadoFin=finClarificado)
-				
-
-				return HttpResponseRedirect('/')
-
-				#PARA PRUEBAS
-				#return render_to_response('aplicarperfil.html', {'pTablas':perfilTablas,'fTablas':fermentadorTablas,
-				#	'perfil':perfilNombre,'fermentador':fermentadorNombre,'error':error})
-
-				
-		else:
-			return render_to_response('aplicarperfil.html', {'perfiles':perfiles, 'fermentadores':fermentadores})
-		
-	
-
-
-
 
 '''
-# CAMPOS PARA INSERSION DE UN NUEVO ControlProcesos
-controlProceso = ControlProcesos(coccionNum=30,fechaInicio=datetime.now(),fermentador=fermentadorTablas.id,
-					sensor=fermentadorTablas.sensor.id,temperaturaPerfil=perfilTablas.id,activo=True,fermentado1Fin=finFermentado1,
-					fermentado2Fin=finFermentado2,maduradoFin=finMadurado,clarificadoFin=finClarificado)
-
-
-#########################################################################################################################
-
-
-#########################################################################################################################
-
-def sumar_dias(dias=0):
-    fecha = datetime.now() + timedelta(days=dias)
-    nueva_fecha = fecha.strftime("%Y-%m-%d %H:%M:%S")
-    return nueva_fecha	
-
-
-
-def aplicarPerfilTemp(request):
-	perfiles = TemperaturasPerfiles.objects.all()
-	fermentadores = Fermentadores.objects.filter(activo=False)
-	if request.POST:
-		form = PerfilesTempCrearForm(request.POST)
-		if form.is_valid():
-			#insertar en bd
-	else:
-		return render_to_response('aplicarperfil.html', {'perfiles':perfiles, 'fermentadores':fermentadores})
-	
-	return render_to_response('aplicarperfil.html')
-
-
-
-
+#### EJEMPLO PARA METODO POST
 def contactos(request):
 	if request.method == 'POST':
 		form = FormularioContactos(request.POST)
