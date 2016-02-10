@@ -1,0 +1,53 @@
+{%extends 'base.html'%}
+{% load bootstrap %}
+
+
+{%block content%}
+<legend>Aplicar Perfil de Temperatura</legend>
+<div class="div_forms">
+	<form class="form-horizontal" method="get" action="">
+		<fieldset>
+			<div class="form-group">
+				<div class="col-lg-10">
+					<label for="perfil">Perfil</label>
+					<select name="perfil" class="form-control" id="select">
+						{% for perfiles in perfiles%}
+							<option>{{perfiles.nombre}}</option>
+						{%endfor%}
+					</select>
+					<br>
+					<label for="fermentador">Fermentador</label>
+					<select name="fermentador" class="form-control" id="select">
+						{% for fermentadores in fermentadores%}
+							<option>{{fermentadores.nombre}}</option>
+						{%endfor%}
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-lg-10 col-lg-offset-2">
+					<button type="reset" class="btn btn-default">Cancelar</button>
+					<button type="submit" class="btn btn-primary">Aplicar</button>
+				</div>
+			</div>
+		</fieldset>
+	</form>
+	{%if perfil and not error%}
+		<p>El perfil seleccionado es:</p>
+		<p>{{ perfil }}</p>
+		<p>El fermentador seleccionado es:</p>
+		<p>{{fermentador}}</p>
+		<br>
+		<p>Los datos de tablas de fermentador son</p>
+			<p>{{fTablas.id}}</p>
+		<br>
+		<p>Los datos de tablas de perfil son</p>
+			<p>{{pTablas.id}}</p>
+	{%endif%}
+	{%if error%}
+		{{error}}
+	{%endif%}
+</div>
+{%endblock%}
+
+
