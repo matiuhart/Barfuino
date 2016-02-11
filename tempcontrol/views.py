@@ -10,7 +10,8 @@ import time
 # Vista para el home
 def home(request):
 	
-	return render(request, 'home.html', {'values': [['foo', 32], ['bar', 64], ['baz', 96]]})
+	return render(request, 'home.html', {'values': [['Fermentador', 32]]})
+	#return render(request, 'home.html', {'values': [['Fermentador', 32], ['bar', 64], ['baz', 96]]})
 
 
 # Vista para crear perfil de temperatura
@@ -68,18 +69,14 @@ def aplicarPerfilTemp(request):
 				finClarificado = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2 + 
 					perfilTablas.diasMadurado + perfilTablas.diasclarificado)
 
-				#Instancio para insersion
+				#Instancio para insersion en ControlProcesos
 				s=Sensores.objects.get(id=fermentadorTablas.sensor.id)
 				f=Fermentadores.objects.get(id=fermentadorTablas.id)
 				p=TemperaturasPerfiles.objects.get(id=perfilTablas.id)
 
-				#TODO!!!
 				#Actualizo Fermentadores.activo a True para que no sea mostrado nuevamente
-				#a = Fermentadores(id=fermentadorTablas.id,nombre=fermentadorTablas.nombre,activo=True)
-				#a.save()
+				Fermentadores.objects.filter(id=fermentadorTablas.id).update(activo=True)
 				
-
-
 				# Inserto los datos para nuevo proceso en ControlProcesos
 				ControlProcesos.objects.create(coccionNum=coccionNumero,fechaInicio=datetime.now(),fermentador=f,
 					sensor=s,temperaturaPerfil=p,activo=True,fermentado1Fin=finFermentado1,
