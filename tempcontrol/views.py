@@ -6,12 +6,23 @@ from django.core.context_processors import csrf
 from datetime import datetime
 from datetime import timedelta
 import time
+import json
+
+def sumar_mins(minutos=0):
+		fecha = datetime.now() + timedelta(minutes=minutos)
+		nueva_fecha = fecha.strftime("%Y-%m-%d %H:%M:%S")
+		return nueva_fecha
+
+
+
 
 # Vista para el home
 def home(request):
+	values = [[sumar_mins(5), 25,34,10], [sumar_mins(8), 18,20,21], [sumar_mins(10), 17,19,10], [sumar_mins(17), 16,15,13], [sumar_mins(11), 15,17,10], [sumar_mins(50), 10,9,10]]
+	fermentadores = ["Fermentador 1","Fermentador 2", "Fermentador 3"]
+
+	return render(request, 'home.html', {'values': values, 'fermentadores':fermentadores })
 	
-	return render(request, 'home.html', {'values': [['Fermentador', 32]]})
-	#return render(request, 'home.html', {'values': [['Fermentador', 32], ['bar', 64], ['baz', 96]]})
 
 
 # Vista para crear perfil de temperatura
