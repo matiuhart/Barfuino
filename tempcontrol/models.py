@@ -75,6 +75,9 @@ class TemperaturasHistorial(models.Model):
 	fechaSensado = models.DateTimeField(verbose_name='fecha de sensado')
 	coccionNumero = models.ForeignKey(ControlProcesos)
 
+	def __str__(self):
+		 return "%s,%s,%s,%s" %(self.fermentador.id,self.fermentador,self.fechaSensado,self.temperatura)
+
 	
 	class Meta:
 		ordering = ["fermentador"]

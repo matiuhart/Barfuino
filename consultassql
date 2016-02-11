@@ -1,0 +1,28 @@
+CONSULTA PARA MOSTRAR BOTONES DE TEMP
+
+
+fermentadoresActivos = CONSULTO FERMENTADORES ACTIVOS EN Fermentadores
+
+
+
+
+
+SELECT nombre FROM Fermentadores WHERE activo=True
+
+SELECT temperatura FROM TemperaturasHistorial WHERE fermentador="Fermentador 1" ORDER BY fechaSensado DESC;
+
+SELECT temperatura FROM tempcontrol_temperaturashistorial WHERE fermentador="Fermentador 1" ORDER BY fechasensado DESC LIMMIT=1;
+
+
+CONSULTA PARA GRAFICA
+
+CONSULTO DATOS DE fermentadores EN TemperaturasHistorial FILTRANDO POR fermentadoresActivos(NOMBRES) Y ULTIMA coccionNumero PARA ESE FERMENTADORES
+
+
+DJANGO
+t =TemperaturasHistorial.objects.order_by('-fechaSensado').filter(fermentador=2).filter(coccionNumero=20)
+
+
+MAS ACOTADA CON VALUES
+# Limito el campo a fechasensado y a 1 la cantidad de resultados 
+t =TemperaturasHistorial.objects.order_by('-fechaSensado').filter(fermentador=2).filter(coccionNumero=20).values('fechaSensado')[0]
