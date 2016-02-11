@@ -1,6 +1,7 @@
+ipython
 django
 django-bootstrap-form
-ipython
-django-google-charts
 django-qsstats-magic
 dateutils
+django-google-charts
+
