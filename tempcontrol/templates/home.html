@@ -4,11 +4,12 @@
 	<legend>Dashboard</legend>
 	<div class="jumbotron">
 		<p>
-		  <button type="button" class="btn btn-primary btn-lg">Fermentador 1 <br>25°</button>
-		  <button type="button" class="btn btn-default btn-lg">Fermentador 2 <br>17°</button>
-		  <button type="button" class="btn btn-default btn-lg">Fermentador 3 <br>16°</button>
-		  <button type="button" class="btn btn-default btn-lg">Fermentador 4 <br>18°</button>
-		  <button type="button" class="btn btn-default btn-lg">Fermentador 5 <br>22°</button>
+		  {% for fermentadorNom in fermentadorbtn %}
+		  	{%for fermentadorTemp in temperaturabtn%}
+		  		<button type="button" class="btn btn-primary btn-lg">{{fermentadorNom}}<br> {{temperaturabtn}}°</button>
+		  	{%endfor%}
+		  {%endfor%}
+		  
 		  
 		</p>
 		

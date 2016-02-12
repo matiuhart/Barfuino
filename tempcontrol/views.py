@@ -14,23 +14,36 @@ def sumar_mins(minutos=0):
 		return nueva_fecha
 
 
-
-
 # Vista para el home
 def home(request):
 	grafica = [[sumar_mins(5), 25,34,10], [sumar_mins(8), 18,20,21], [sumar_mins(10), 17,19,10], [sumar_mins(17), 16,15,13], [sumar_mins(11), 15,17,10], [sumar_mins(50), 10,9,10]]
 	
-	fermentadoresActivos=Fermentadores.objects.filter(activo=True).values('nombre','id')
+
+	fermentadoresActivos=Fermentadores.objects.values('nombre','id').filter(activo=True)
 	fermentadores = {}
 	for i in range(len(fermentadoresActivos)):
-    temperatura =TemperaturasHistorial.objects.order_by('-fechaSensado').filter(fermentador=fermentadoresActivos[i]['id']).values('fechaSensado','fermentador','temperatura')[0]
-    fermentadores[fermentadoresActivos[i]['nombre']] = temperatura.get('temperatura')
-	fermentadores.values()
-
-
-	return render(request, 'home.html', {'values': grafica, 'fermentadores':fermentadores })
+		temperatura =TemperaturasHistorial.objects.order_by('-fechaSensado').filter(fermentador=fermentadoresActivos[i]['id']).values('fechaSensado','fermentador','temperatura')[0]
+		fermentadores[fermentadoresActivos[i]['nombre']] = str(temperatura.get('temperatura'))
+	fermentadorbtn = []
+	temperaturabtn = []
+	
+	for boton in fermentadores:
+		fermentadorbtn.append(fermentadores[boton][0])
+		temperaturabtn.append(fermentadores[boton][1])
 	
 
+
+	return render(request, 'home.html', {'values': grafica, 'fermentadorbtn':fermentadorbtn, 'temperaturabtn':temperaturabtn })
+
+'''
+fermentadorbtn = []
+	temperaturabtn = []
+
+	for boton in fermentadores:
+		fermentadorbtn.append(fermentadores[boton][0])
+		temperaturabtn.append(int(fermentadores[boton][1])
+'''
+	
 
 # Vista para crear perfil de temperatura
 def crearPerfTemp(request):
