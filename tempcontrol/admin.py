@@ -41,7 +41,7 @@ class TemperaturasPerfilesAdmin(admin.ModelAdmin):
 	#fields = ('coccionNum','fermentador','sensor','temperaturaPerfil','activo')
 
 class TemperaturasHistorialAdmin(admin.ModelAdmin):
-	list_display = ('coccionNumero','fermentador','sensorId','temperatura','fechaSensado') # Autores redefinida en modelo por se ManyToMany
+	list_display = ('coccionNumero','fermentador','sensorId','temperatura','fechaSensado','activo') # Autores redefinida en modelo por se ManyToMany
 	list_filter = ('coccionNumero','fermentador','sensorId','temperatura','fechaSensado',)
 	ordering = ('coccionNumero','fermentador',)
 	raw_id_fields = ('coccionNumero',)

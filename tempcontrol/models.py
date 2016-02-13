@@ -78,6 +78,7 @@ class TemperaturasHistorial(models.Model):
 	temperatura = models.DecimalField(max_digits=3, decimal_places=1)
 	fechaSensado = models.DateTimeField(verbose_name='fecha de sensado')
 	coccionNumero = models.ForeignKey(ControlProcesos)
+	activo = models.BooleanField(default=True)
 
 	def __str__(self):
 		 return "%s,%s,%s,%s" %(self.fermentador.id,self.fermentador,self.fechaSensado,self.temperatura)
