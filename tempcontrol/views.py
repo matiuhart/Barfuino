@@ -124,6 +124,8 @@ def pruebas(request):
 
 	return render(request, 'pruebas.html', {'fermentadorbtn':t})
 
+def configuraciones(request):
+	hola="mundi"
 
 
 '''
@@ -161,7 +163,5 @@ def pruebas(request):
 
 	
 	return render_to_response('pruebas.html', args)
-
-
 '''
 

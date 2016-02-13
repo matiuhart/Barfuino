@@ -62,3 +62,12 @@ fermentadores.values()
     
 for nombres in range(len(f)):
     print(f[espacio]['nombre'])
+
+
+
+
+
+
+
+
+ t = ControlProcesos.objects.order_by('id').filter(fermentador__activo__exact=True).values()

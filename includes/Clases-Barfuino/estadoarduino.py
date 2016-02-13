@@ -19,6 +19,9 @@ def RestarMinutos(minutos=0):
 # def EstadoArduino(produccionEstadoId):
 
 def EstadoTemperaturas(produccionEstadoId):
+    
+    #Recupero id de fermentador, fase actual, temperaturas del perfil aplicado,
+
     query = "SELECT t_fermentadores.f_nombrefermentador,t_produccionfases.f_nombre,t_perfilestemperatura.f_tempfermentacion_1, \
     t_perfilestemperatura.f_tempfermentacion_2,t_perfilestemperatura.f_tempmaduracion FROM t_produccionestados \
     INNER JOIN t_fermentadores ON t_produccionestados.f_fermentador = t_fermentadores.id \
@@ -30,6 +33,8 @@ def EstadoTemperaturas(produccionEstadoId):
     conexion = MysqlQuery(query)
     resultado = conexion.runQueryAsDictAll()
     datos = resultado[0]
+
+    # Con los datos de la consulta recupero nombre de fermentador, fase actual y datos de perfil de temp
 
     fermentador = datos['f_nombrefermentador']
     fase = datos['f_nombre']

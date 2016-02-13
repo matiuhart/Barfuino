@@ -88,6 +88,12 @@ class TemperaturasHistorial(models.Model):
 		ordering = ["fermentador"]
 		verbose_name_plural = "Historial de Temperaturas"
 
+class Configuraciones(models.Model):
+	temperaturaClarificado = models.DecimalField("Temperatura de Clarificado por Defecto",max_digits=3, decimal_places=1,null=True)
+	temperaturaFinalizado = models.DecimalField("Temperatura de Finalizado por Defecto",max_digits=3, decimal_places=1,null=True)
+	brewerMail = models. EmailField(max_length=100,null=True)
+
+
 
 
 
