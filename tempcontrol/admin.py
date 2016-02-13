@@ -23,12 +23,12 @@ class SensoresAdmin(admin.ModelAdmin):
 
 
 class ControlProcesosAdmin(admin.ModelAdmin):
-	list_display = ('coccionNum','fermentador','sensor','temperaturaPerfil','fechaInicio',
-	'fermentado1Fin','fermentado2Fin','maduradoFin','clarificadoFin','activo') # Autores redefinida en modelo por se ManyToMany
-	list_filter = ('coccionNum','fermentador','sensor','temperaturaPerfil','activo')
+	list_display = ('fermentador','temperaturaPerfil','fechaInicio',
+	'fermentado1Fin','fermentado2Fin','maduradoFin','clarificadoFin','fase','coccionNum','activo') # Autores redefinida en modelo por se ManyToMany
+	list_filter = ('coccionNum','fermentador','sensor','temperaturaPerfil','fase','activo')
 	ordering = ('coccionNum',)
 	fields = ('coccionNum','fermentador','sensor','temperaturaPerfil','fechaInicio',
-	'fermentado1Fin','fermentado2Fin','maduradoFin','clarificadoFin','activo') #Cambia orden y campos mostrados en edicion
+	'fermentado1Fin','fermentado2Fin','maduradoFin','clarificadoFin','fase','activo') #Cambia orden y campos mostrados en edicion
 	#filter_horizontal = ('autores',) # Solo trabajan con campos ManyToMany
 	#filter_vertical = ('autores',)
 	#raw_id_fields = ('fermentador',) # Seleccion con id

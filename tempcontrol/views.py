@@ -6,44 +6,32 @@ from django.core.context_processors import csrf
 from datetime import datetime
 from datetime import timedelta
 import time
-import json
+
 
 def sumar_mins(minutos=0):
 		fecha = datetime.now() + timedelta(minutes=minutos)
 		nueva_fecha = fecha.strftime("%Y-%m-%d %H:%M:%S")
 		return nueva_fecha
 
+def restart_mins(minutos=0):
+		fecha = datetime.now() - timedelta(minutes=minutos)
+		nueva_fecha = fecha.strftime("%Y-%m-%d %H:%M:%S")
+		return nueva_fecha
 
 # Vista para el home
 def home(request):
 	grafica = [[sumar_mins(5), 25,34,10], [sumar_mins(8), 18,20,21], [sumar_mins(10), 17,19,10], [sumar_mins(17), 16,15,13], [sumar_mins(11), 15,17,10], [sumar_mins(50), 10,9,10]]
-	
+	start_date = restart_mins(60)
+	end_date = datetime.now()
 
-	fermentadoresActivos=Fermentadores.objects.values('nombre','id').filter(activo=True)
-	fermentadores = {}
-	for i in range(len(fermentadoresActivos)):
-		temperatura =TemperaturasHistorial.objects.order_by('-fechaSensado').filter(fermentador=fermentadoresActivos[i]['id']).values('fechaSensado','fermentador','temperatura')[0]
-		fermentadores[fermentadoresActivos[i]['nombre']] = str(temperatura.get('temperatura'))
-	fermentadorbtn = []
-	temperaturabtn = []
-	
-	for boton in fermentadores:
-		fermentadorbtn.append(fermentadores[boton][0])
-		temperaturabtn.append(fermentadores[boton][1])
-	
+	try:
+		t = TemperaturasHistorial.objects.order_by('id').filter(fermentador__activo__exact=True).filter(fechaSensado__range=(start_date,end_date))
+	except:
+		t = ""
+	#fermentadorbtn= str(t.temperatura)
 
+	return render(request, 'home.html', {'values': grafica, 'fermentadorbtn':t})
 
-	return render(request, 'home.html', {'values': grafica, 'fermentadorbtn':fermentadorbtn, 'temperaturabtn':temperaturabtn })
-
-'''
-fermentadorbtn = []
-	temperaturabtn = []
-
-	for boton in fermentadores:
-		fermentadorbtn.append(fermentadores[boton][0])
-		temperaturabtn.append(int(fermentadores[boton][1])
-'''
-	
 
 # Vista para crear perfil de temperatura
 def crearPerfTemp(request):
@@ -125,6 +113,36 @@ def aplicarPerfilTemp(request):
 
 # Vista para pruebas	
 def pruebas(request):
+	start_date = restart_mins(60)
+	end_date = datetime.now()
+
+	try:
+		t = TemperaturasHistorial.objects.order_by('id').filter(fermentador__activo__exact=True).filter(fechaSensado__range=(start_date,end_date))
+	except:
+		t = ""
+	#fermentadorbtn= str(t.temperatura)
+
+	return render(request, 'pruebas.html', {'fermentadorbtn':t})
+
+
+
+'''
+#### EJEMPLO PARA METODO POST
+def contactos(request):
+	if request.method == 'POST':
+		form = FormularioContactos(request.POST)
+		if form.is_valid():
+			cd = form.cleaned_data
+			send_mail(cd['asunto'],cd['mensaje'],cd.get('email',
+				'noreply@mtu-it.com.ar'),['siteowner@mtu-it.com.ar'])
+			return render_to_response('gracias.html',{'mensaje':cd.get('mensaje'), 
+				'asunto':cd.get('asunto'),'email':cd.get('email')})
+	else:
+		form = FormularioContactos(initial={'asunto':"que buen sitio!",
+			'email':"mi@mail.com",'mensaje':"sarasaaaaaaaaaaa"})
+	return render(request,'formulario-contactos.html',{'form':form})
+
+def pruebas(request):
 	if request.POST:
 		perfilForm = PerfilTempForm(request.POST)
 		fermentadorForm = FermentadorForm(request.POST)
@@ -145,21 +163,5 @@ def pruebas(request):
 	return render_to_response('pruebas.html', args)
 
 
-
-'''
-#### EJEMPLO PARA METODO POST
-def contactos(request):
-	if request.method == 'POST':
-		form = FormularioContactos(request.POST)
-		if form.is_valid():
-			cd = form.cleaned_data
-			send_mail(cd['asunto'],cd['mensaje'],cd.get('email',
-				'noreply@mtu-it.com.ar'),['siteowner@mtu-it.com.ar'])
-			return render_to_response('gracias.html',{'mensaje':cd.get('mensaje'), 
-				'asunto':cd.get('asunto'),'email':cd.get('email')})
-	else:
-		form = FormularioContactos(initial={'asunto':"que buen sitio!",
-			'email':"mi@mail.com",'mensaje':"sarasaaaaaaaaaaa"})
-	return render(request,'formulario-contactos.html',{'form':form})
 '''
 

@@ -1,15 +1,16 @@
 {%extends 'base.html'%}
 
 {%block content%}
-		<form action="" method="post">{% csrf_token %}
-		<p>
+	<p>
+		{{ fermentadorbtn }}
+	<p>
+	{% for fermentador in fermentadorbtn %}
+	<p>
+		{{fermentador.fermentador}}:{{fermentador.temperatura}}
+	</p>
+	{%endfor%}
 
-		{{ fermentadorForm.as_p }}
-		{{ perfilForm.as_p }}
-		<p>
-
-		<input type="submit" name="submit" value="Crear Articulo">
-	</form>
+	
 
 {%endblock%}
 
