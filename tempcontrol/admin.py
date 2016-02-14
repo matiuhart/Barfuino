@@ -3,10 +3,10 @@ from tempcontrol.models import *
 
 
 class FermentadoresAdmin(admin.ModelAdmin):
-	list_display = ('nombre','sensor','activo') # Autores redefinida en modelo por se ManyToMany
+	list_display = ('id','nombre','sensor','activo') # Autores redefinida en modelo por se ManyToMany
 	list_filter = ('activo','nombre','sensor')
 	ordering = ('nombre',)
-	fields = ('nombre','sensor','activo') #Cambia orden y campos mostrados en edicion
+	fields = ('id','nombre','sensor','activo') #Cambia orden y campos mostrados en edicion
 	#filter_horizontal = ('autores',) # Solo trabajan con campos ManyToMany
 	#filter_vertical = ('autores',)
 	#raw_id_fields = ('editores',) # Seleccion con id

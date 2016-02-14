@@ -4,6 +4,10 @@
 import os
 import sys
 import django
+from datetime import datetime
+from datetime import timedelta
+import time
+from tempcontrol.models import *
 
 sys.path.append("/home/mati/bin/django/barfuino")
 os.environ["DJANGO_SETTINGS_MODULE"] = "barfuino.settings"
@@ -16,7 +20,12 @@ de ser mayor en cualquiera de los dos casos, envia una alerta via email con el a
 '''
 
 
-from tempcontrol.models import *
+
+# Resta de minutos de medicion anterior
+def RestarMinutos(minutos=0):
+    hora = datetime.now() - timedelta(minutes=minutos)
+    nuevaHora = hora.strftime("%Y-%m-%d %H:%M:%S")
+    return nuevaHora
 
 # Recupero procesos activos#####################################
 def buscarPorcesosActivos():
@@ -53,16 +62,43 @@ def controlTemperaturaFase(id):
 		try:
 			temperaturaFase = temperaturas.split(",")[3]
 		except:
-			print("Seteando temperatura de clarificado desde configuraciones")
 			temperaturaFase = datosConfiguraciones.temperaturaClarificado
 	elif (faseActual == "finalizado"):
 		try:
 			temperaturaFase = temperaturas.split(",")[4]
 		except:
-			print("Seteando temperatura de finalizado desde configuraciones")
 			temperaturaFase = datosConfiguraciones.temperaturaFinalizado
 
-	print("Temperatura: " + str(temperaturaFase) + " ProcesoId :" + str(controlProcesoId))
-	#return temperaturaFase
+	print("\n PROCESOID: " + str(controlProcesoId) + "\n FERMENTADOR: " + str(datosProceso.fermentador) + "\n TEMPERATURA: " + str(temperaturaFase))
+	
+	# Recupero temperaturas sensadas de los ultimos 45' para el fermentador actual
+	ultimasTemperaturas = TemperaturasHistorial.objects.filter(fermentador=fermentadorId).filter(fechaSensado__gte=RestarMinutos(45)).values('temperatura')
+
+	# Si encuentro valores de sensado, verifico si las ultimas 3 temperaturas son mayores que la correspondiente a la fase, si esto
+	# sucede o no se encuentran valores de sensado, se envia una alerta. De lo contrario no se realiza ninguna accion
+	if (ultimasTemperaturas):
+		temperatura1,temperatura2,temperatura3 = ultimasTemperaturas[0].get('temperatura'), ultimasTemperaturas[1].get('temperatura'),ultimasTemperaturas[2].get('temperatura')
+		CUERPO =""
+		ASUNTO =""
+		#si las ultimas 3 temperaturas son mayores a la de la fase envia alerta
+		if ((temperatura1 > int(temperaturaFase)) & (temperatura2 > int(temperaturaFase)) & (temperatura3 > int(temperaturaFase))):
+			CUERPO = 'En los ultimos 45 min las temperaturas exeden los %s° C seteados, las ultimas mediciones son %s° C'%(temperaturaFase,temperaturas)
+			ASUNTO = 'Temperaturas Altas en Fermentador %s'%(datosProceso.fermentador)
+
+			#EnviarCorreo(ASUNTO,CUERPO)
+		else:
+			print("\n NO HAY ALERTAS \n")
+			
+	else:
+		CUERPO = 'En los ultimos 45 min las temperaturas no pudieron ser sensadas en el fermentador %s, por favor verifique el sistema'%(datosProceso.fermentador)
+		ASUNTO = 'Problema de Sensado de Temperaturas en Fermentador %s'%(datosProceso.fermentador)
+
+		#EnviarCorreo(ASUNTO,CUERPO)
+
+	print("\n FASE ACTUAL: " + faseActual)
+	if (CUERPO):
+		print("\n CUERPO: " + CUERPO)
+		print("\n ASUNTO: " + ASUNTO)
+		print("------------------------------------------------------------------------------------------------------------------------------")
 
 
