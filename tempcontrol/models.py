@@ -39,7 +39,7 @@ class TemperaturasPerfiles(models.Model):
 	diasFermentado2 = models.IntegerField(verbose_name='días 2do Fermentado',default='0',validators=[MaxValueValidator(99),MinValueValidator(0)])
 	diasMadurado = models.IntegerField(verbose_name='días Madurado',validators=[MaxValueValidator(99),MinValueValidator(1)])
 	diasclarificado = models.IntegerField(verbose_name='días Clarificado',validators=[MaxValueValidator(99),MinValueValidator(1)])	
-	temperaturas = models.CommaSeparatedIntegerField(max_length=9)#validators=[validate_comma_separated_integer_list('0,0,0')]
+	temperaturas = models.CommaSeparatedIntegerField(max_length=14)#validators=[validate_comma_separated_integer_list('0,0,0')]
 	descripcion = models.CharField(max_length=200,verbose_name='descripción')
 
 	def __str__(self):

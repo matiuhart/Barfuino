@@ -63,6 +63,31 @@ fermentadores.values()
 for nombres in range(len(f)):
     print(f[espacio]['nombre'])
 
+------------------------------------------------------------------------------------------------------------
+
+
+BOTONES
+from datetime import datetime
+from datetime import timedelta
+import time
+
+
+def restart_mins(minutos=0):
+	fecha = datetime.now() - timedelta(minutes=minutos)
+	nueva_fecha = fecha.strftime("%Y-%m-%d %H:%M:%S")
+	return nueva_fecha
+
+
+start_date = restart_mins(60)
+end_date = datetime.now()
+
+t =TemperaturasHistorial.objects.filter(fermentador__activo__exact=True).filter(fechaSensado__range=(start_date,end_date)).order_by('id')
+
+
+GRAFICA
+from tempcontrol.models import *
+
+t =TemperaturasHistorial.objects.filter(fermentador__activo__exact=True).filter(fechaSensado__range=(start_date,end_date)).order_by('id').filter('activo')
 
 
 
@@ -70,4 +95,4 @@ for nombres in range(len(f)):
 
 
 
- t = ControlProcesos.objects.order_by('id').filter(fermentador__activo__exact=True).values()
+

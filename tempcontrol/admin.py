@@ -23,7 +23,7 @@ class SensoresAdmin(admin.ModelAdmin):
 
 
 class ControlProcesosAdmin(admin.ModelAdmin):
-	list_display = ('fermentador','temperaturaPerfil','fechaInicio',
+	list_display = ('id','fermentador','temperaturaPerfil','fechaInicio',
 	'fermentado1Fin','fermentado2Fin','maduradoFin','clarificadoFin','fase','coccionNum','activo') # Autores redefinida en modelo por se ManyToMany
 	list_filter = ('coccionNum','fermentador','sensor','temperaturaPerfil','fase','activo')
 	ordering = ('coccionNum',)
@@ -46,6 +46,11 @@ class TemperaturasHistorialAdmin(admin.ModelAdmin):
 	ordering = ('coccionNumero','fermentador',)
 	raw_id_fields = ('coccionNumero',)
 
+
+class ConfiguracionesAdmin(admin.ModelAdmin):
+	list_display = ('temperaturaClarificado','temperaturaFinalizado','brewerMail')
+
+
 # Register your models here.
 
 admin.site.register(Fermentadores,FermentadoresAdmin)
@@ -53,4 +58,11 @@ admin.site.register(Sensores,SensoresAdmin)
 admin.site.register(TemperaturasHistorial,TemperaturasHistorialAdmin)
 admin.site.register(TemperaturasPerfiles,TemperaturasPerfilesAdmin)
 admin.site.register(ControlProcesos,ControlProcesosAdmin)
+admin.site.register(Configuraciones,ConfiguracionesAdmin)
+
+
+
+
+
+
 
