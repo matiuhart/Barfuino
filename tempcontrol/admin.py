@@ -42,9 +42,9 @@ class TemperaturasPerfilesAdmin(admin.ModelAdmin):
 
 class TemperaturasHistorialAdmin(admin.ModelAdmin):
 	list_display = ('fermentador','sensorId','temperatura','fechaSensado','activo') # Autores redefinida en modelo por se ManyToMany
-	list_filter = ('fermentador','sensorId','temperatura','fechaSensado',)
-	ordering = ('coccionNumero','fermentador',)
-	raw_id_fields = ('coccionNumero',)
+	#list_filter = ('fermentador','sensorId','temperatura','fechaSensado',)
+	ordering = ('fermentador',)
+	#raw_id_fields = ('coccionNumero',)
 
 
 class ConfiguracionesAdmin(admin.ModelAdmin):

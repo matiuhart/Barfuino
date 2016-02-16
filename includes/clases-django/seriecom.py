@@ -1,15 +1,16 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python3.4
+# -*- encoding: utf-8 -*-
 
-import serial
+
 import time
 from time import sleep
 import glob
+import serial
 
 # BUSQUEDA DE PUERTOS AARDUINO
 def serial_ports():
-    #ports = glob.glob('/dev/ttyACM[0-10]*')
-    ports = glob.glob('/dev/ttyUSB[0-10]*')
+    ports = glob.glob('/dev/ttyACM[0-10]*')
+    #ports = glob.glob('/dev/ttyUSB[0-10]*')
     result = ""
     for port in ports:
         try:

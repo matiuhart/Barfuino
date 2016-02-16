@@ -7,14 +7,18 @@ import django
 from datetime import datetime
 from datetime import timedelta
 import time
-from tempcontrol.models import *
-from seriecom import *
+from seriecom import serial_w
 from time import sleep
 from datetime import datetime, timedelta
 import glob
 from estadoarduino import buscarPorcesosActivos
 from django.utils import timezone
 
+sys.path.append("/home/mati/bin/django/barfuino")
+os.environ["DJANGO_SETTINGS_MODULE"] = "barfuino.settings"
+django.setup()
+
+from tempcontrol.models import *
 
 ahora = timezone.make_aware(datetime.now())
 #fecha=now.strftime('%Y-%m-%d %H:%M:%S')
@@ -37,13 +41,14 @@ def grabarTemperatura(procesoId,coccionId,fermentadorArduinoId,fermentadorId,sen
 	time.sleep(2.5)
 	#print serieout
 	temp = int(serieout)
-	print(temp)
+	#print(temp)
 	#print fermentadorId[0][0]
 	if (temp > 0 and temp < 35 and temp != ""):
 		TemperaturasHistorial.objects.create(fermentador=fermentadorId, sensorId=sensorId,
 			temperatura=temp,fechaSensado=ahora,coccionNumero=coccionId)
+		print("Seguardaron los datos de sensado")
 	else:
-		temp_hist(fermentador)
+		grabarTemperatura(procesoId,coccionId, fermentadorArduinoId, fermentadorId, sensorId)
 
 
 for proceso in procesosActivos:
