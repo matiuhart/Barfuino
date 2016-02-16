@@ -5,3 +5,4 @@ django-qsstats-magic
 dateutils
 django-google-charts
 pyserial
+gunicorn
