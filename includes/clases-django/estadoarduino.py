@@ -34,8 +34,7 @@ def buscarPorcesosActivos():
 	for i in range(len(c)):
 	    ids.append(c[i].get('id'))
 
-	for id in ids:
-		controlTemperaturaFase(id)
+	return ids
 		
 ###############################################################
 

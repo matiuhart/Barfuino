@@ -3,10 +3,10 @@ from tempcontrol.models import *
 
 
 class FermentadoresAdmin(admin.ModelAdmin):
-	list_display = ('id','nombre','sensor','activo') # Autores redefinida en modelo por se ManyToMany
+	list_display = ('nombre','sensor','arduinoId','activo') # Autores redefinida en modelo por se ManyToMany
 	list_filter = ('activo','nombre','sensor')
 	ordering = ('nombre',)
-	fields = ('id','nombre','sensor','activo') #Cambia orden y campos mostrados en edicion
+	fields = ('nombre','sensor','arduinoId','activo') #Cambia orden y campos mostrados en edicion
 	#filter_horizontal = ('autores',) # Solo trabajan con campos ManyToMany
 	#filter_vertical = ('autores',)
 	#raw_id_fields = ('editores',) # Seleccion con id
@@ -23,7 +23,7 @@ class SensoresAdmin(admin.ModelAdmin):
 
 
 class ControlProcesosAdmin(admin.ModelAdmin):
-	list_display = ('id','fermentador','temperaturaPerfil','fechaInicio',
+	list_display = ('id','coccionNum','fermentador','temperaturaPerfil','fechaInicio',
 	'fermentado1Fin','fermentado2Fin','maduradoFin','clarificadoFin','fase','coccionNum','activo') # Autores redefinida en modelo por se ManyToMany
 	list_filter = ('coccionNum','fermentador','sensor','temperaturaPerfil','fase','activo')
 	ordering = ('coccionNum',)
@@ -41,8 +41,8 @@ class TemperaturasPerfilesAdmin(admin.ModelAdmin):
 	#fields = ('coccionNum','fermentador','sensor','temperaturaPerfil','activo')
 
 class TemperaturasHistorialAdmin(admin.ModelAdmin):
-	list_display = ('coccionNumero','fermentador','sensorId','temperatura','fechaSensado','activo') # Autores redefinida en modelo por se ManyToMany
-	list_filter = ('coccionNumero','fermentador','sensorId','temperatura','fechaSensado',)
+	list_display = ('fermentador','sensorId','temperatura','fechaSensado','activo') # Autores redefinida en modelo por se ManyToMany
+	list_filter = ('fermentador','sensorId','temperatura','fechaSensado',)
 	ordering = ('coccionNumero','fermentador',)
 	raw_id_fields = ('coccionNumero',)
 

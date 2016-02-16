@@ -1,71 +1,3 @@
-CONSULTA PARA MOSTRAR BOTONES DE TEMP
-
-
-fermentadoresActivos = CONSULTO FERMENTADORES ACTIVOS EN Fermentadores
-
-
-
-
-
-SELECT nombre FROM Fermentadores WHERE activo=True
-
-SELECT temperatura FROM TemperaturasHistorial WHERE fermentador="Fermentador 1" ORDER BY fechaSensado DESC;
-
-SELECT temperatura FROM tempcontrol_temperaturashistorial WHERE fermentador="Fermentador 1" ORDER BY fechasensado DESC LIMMIT=1;
-
-
-CONSULTA PARA GRAFICA
-
-CONSULTO DATOS DE fermentadores EN TemperaturasHistorial FILTRANDO POR fermentadoresActivos(NOMBRES) Y ULTIMA coccionNumero PARA ESE FERMENTADORES
-t =TemperaturasHistorial.objects.order_by('-fechaSensado').filter(fermentador=2).filter(coccionNumero=20).values('fechaSensado')[0]
-
-
-DJANGO
-t =TemperaturasHistorial.objects.order_by('-fechaSensado').filter(fermentador=2).filter(coccionNumero=20)
-
-
-BOTONES
-
-
-#Busco fermentadores activos y recupero nombres y id's
-fermentadoresActivos=Fermentadores.objects.filter(activo=True).values('nombre','id')
-
-
-# Limito el campo a fechasensado y a 1 la cantidad de resultados 
-t =TemperaturasHistorial.objects.order_by('-fechaSensado').filter(fermentador=2).values('fechaSensado','fermentador','temperatura')[0]
-
-
-
-
-
-
-
-
-fermentadoresActivos = recupero fermentadores activos
-
-para cada fermentador en fermentadores
-    diccionario = recupero temperatura
-
-    
-fermentadoresActivos=Fermentadores.objects.filter(activo=True).values('nombre','id')
-fermentadores = {}
-for i in range(len(fermentadoresActivos)):
-    temperatura =TemperaturasHistorial.objects.order_by('-fechaSensado').filter(fermentador=fermentadoresActivos[i]['id']).values('fechaSensado','fermentador','temperatura')[0]
-    fermentadores[fermentadoresActivos[i]['nombre']] = temperatura.get('temperatura')
-fermentadores.values()
-    
-
-    
-    
-    
-    
-    
-for nombres in range(len(f)):
-    print(f[espacio]['nombre'])
-
-------------------------------------------------------------------------------------------------------------
-
-
 BOTONES
 from datetime import datetime
 from datetime import timedelta
@@ -88,6 +20,29 @@ GRAFICA
 from tempcontrol.models import *
 
 t =TemperaturasHistorial.objects.filter(fermentador__activo__exact=True).filter(fechaSensado__range=(start_date,end_date)).order_by('id').filter('activo')
+
+
+SCRIPTS
+
+controlId
+
+def grabarTemperatura(procesoId,coccionId,fermentadorArduinoId,fermentadorId,sensorId):
+
+	procesosTablas = ControlProcesos.objects.get(id=procesoId)
+	fermentadoresTablas = Fermentadores.objects.get(id=fermentadorId)
+	sensoresTablas = Sensores.objects.get(id=sensorId)
+
+	# Instacio para insersion
+	fermentadorId = Fermentadores.objects.get(id=fermentadoresTablas.id)
+	fermentadorArduinoId = Fermentadores.objects.get(id=fermentadoresTablas.id)
+	coccionId = ControlProcesos.objects.get(id=procesosTablas.id)
+	sensorId= Sensores.objects.get(id=sensoresTablas.id)
+
+	temp = 99
+
+	TemperaturasHistorial.objects.create(fermentador=fermentadorId, sensorId=sensorId,
+			temperatura=temp,fechaSensado=ahora,coccionNumero=coccionId)
+
 
 
 

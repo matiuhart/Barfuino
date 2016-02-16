@@ -23,6 +23,7 @@ class Fermentadores(models.Model):
 	nombre = models.CharField(max_length=20,unique=True)
 	activo = models.BooleanField(default=False)
 	sensor = models.ForeignKey(Sensores)
+	arduinoId = models.IntegerField(verbose_name="Identificador en Arduino",validators=[MaxValueValidator(99),MinValueValidator(1)], default=1)
 
 
 	def __str__(self):
@@ -58,14 +59,15 @@ class ControlProcesos(models.Model):
 	temperaturaPerfil = models.ForeignKey(TemperaturasPerfiles,verbose_name='Perf. Temperatura')
 	activo = models.BooleanField(default=True)
 	fermentado1Fin = models.DateTimeField(verbose_name='Fermentado 1')
-	fermentado2Fin = models.DateTimeField(verbose_name='Fermentado 2')
+	fermentado2Fin = models.DateTimeField(verbose_name='Fermentado 2',blank=True,null=True,default="")
 	maduradoFin = models.DateTimeField(verbose_name='Madurado')
 	clarificadoFin = models.DateTimeField(verbose_name='Clarificado')
 	fase = models.CharField(max_length=15,default='fermentacion1')
 
 
-	def __unicode__(self):
-		return "%s" %(self.coccionNum)
+	def __str__(self):
+		return "%s,%s,%s,%s,%s,%s,%s," %(self.coccionNum, self.fechaInicio, self.fermentado1Fin, 
+			self.fermentado2Fin, self.maduradoFin,self.clarificadoFin, self.fase)
 
 	class Meta:
 		ordering = ["fermentador"]
@@ -81,7 +83,7 @@ class TemperaturasHistorial(models.Model):
 	activo = models.BooleanField(default=True)
 
 	def __str__(self):
-		 return "%s,%s,%s,%s" %(self.fermentador.id,self.fermentador,self.fechaSensado,self.temperatura)
+		 return "%s,%s,%s,%s,%s" %(self.coccionNumero,self.fermentador.id,self.fermentador,self.fechaSensado,self.temperatura)
 
 	
 	class Meta:

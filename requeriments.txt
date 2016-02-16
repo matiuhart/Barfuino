@@ -4,4 +4,4 @@ django-bootstrap-form
 django-qsstats-magic
 dateutils
 django-google-charts
-
+pyserial
