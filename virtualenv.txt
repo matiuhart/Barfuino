@@ -1,0 +1,10 @@
+# Barfuino
+virtualenv
+virtualenvwrapper
+ipython
+'''
+export WORKON_HOME=/home/myenvs
+mkdir -p $WORKON_HOME
+source /usr/local/bin/virtualenvwrapper.sh
+mkvirtualenv myenv
+'''
