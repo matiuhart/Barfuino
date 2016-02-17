@@ -7,10 +7,20 @@ from time import sleep
 import glob
 import serial
 
+from estadoarduino import *
+
+sys.path.append("/home/mati/bin/django/barfuino")
+os.environ["DJANGO_SETTINGS_MODULE"] = "barfuino.settings"
+django.setup()
+
 # BUSQUEDA DE PUERTOS AARDUINO
 def serial_ports():
-    ports = glob.glob('/dev/ttyACM[0-10]*')
-    #ports = glob.glob('/dev/ttyUSB[0-10]*')
+    try:
+        ports = glob.glob('/dev/ttyUSB[0-10]*')
+
+    except:
+        ports = glob.glob('/dev/ttyACM[0-10]*')    
+    
     result = ""
     for port in ports:
         try:
@@ -33,7 +43,7 @@ def serial_w(mode,ferm,temp=''):
         print(mode+ferm+temp)
 
     elif (mode == 'g' or 'f'):
-        serie.write(mode+ferm)
+        serie.write(mode+str(ferm)
         time.sleep(0.1)
         while serie.inWaiting() > 0:
             temperatura += serie.read(1)

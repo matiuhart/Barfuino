@@ -33,11 +33,11 @@ def grabarTemperatura(procesoId,coccionId,fermentadorArduinoId,fermentadorId,sen
 
 	# Instacio para insersion
 	fermentadorId = Fermentadores.objects.get(id=fermentadoresTablas.id)
-	fermentadorArduinoId = Fermentadores.objects.get(id=fermentadoresTablas.id)
+	ArduinoId = Fermentadores.objects.get(id=fermentadoresTablas.id)
 	coccionId = ControlProcesos.objects.get(id=procesosTablas.id)
 	sensorId= Sensores.objects.get(id=sensoresTablas.id)
 	
-	serieout = serial_w('g',str(fermentadorArduinoId))
+	serieout = serial_w('g',str(b'fermentadorArduinoId'))
 	time.sleep(2.5)
 	#print serieout
 	temp = int(serieout)
@@ -51,13 +51,13 @@ def grabarTemperatura(procesoId,coccionId,fermentadorArduinoId,fermentadorId,sen
 		grabarTemperatura(procesoId,coccionId, fermentadorArduinoId, fermentadorId, sensorId)
 
 
-for proceso in procesosActivos:
-	datosProceso = ControlProcesos.objects.get(id=controlProcesoId)
+for procesoId in procesosActivos:
+	datosProceso = ControlProcesos.objects.get(id=procesoId)
 
-	procesoId = datosProceso.id
 	coccionId = datosProceso.coccionNum
 	sensorId= datosProceso.sensor_id
-	fermentadorArduinoId = datosProceso.fermentador.arduinoId	
+	fermentadorArduinoId = datosProceso.fermentador.arduinoId
+	fermentadorId = datosProceso.fermentador_id	
 
 	grabarTemperatura(procesoId,coccionId, fermentadorArduinoId, fermentadorId, sensorId)
 

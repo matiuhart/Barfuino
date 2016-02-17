@@ -7,11 +7,12 @@ import django
 from datetime import datetime
 from datetime import timedelta
 import time
-from tempcontrol.models import *
+
 
 sys.path.append("/home/mati/bin/django/barfuino")
 os.environ["DJANGO_SETTINGS_MODULE"] = "barfuino.settings"
 django.setup()
+from tempcontrol.models import *
 
 '''
 Estas funciones realizan el monitoreo de las temperaturas en los fermentadores. Verifica en la base de datos si el tiempo del ultimo 
