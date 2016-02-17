@@ -1,0 +1,12 @@
+# Barfuino
+virtualenv
+virtualenvwrapper
+ipython
+
+'''
+apt-get install uwsgi uwsgi-plugin-python3
+export WORKON_HOME=/home/myenvs
+mkdir -p $WORKON_HOME
+source /usr/local/bin/virtualenvwrapper.sh
+mkvirtualenv myenv
+'''
