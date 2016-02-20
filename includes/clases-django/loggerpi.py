@@ -33,22 +33,29 @@ def grabarTemperatura(procesoId,coccionId,fermentadorArduinoId,fermentadorId,sen
 
 	# Instacio para insersion
 	fermentadorId = Fermentadores.objects.get(id=fermentadoresTablas.id)
-	ArduinoId = Fermentadores.objects.get(id=fermentadoresTablas.id)
+	arduinoId = Fermentadores.objects.get(id=fermentadoresTablas.id)
 	coccionId = ControlProcesos.objects.get(id=procesosTablas.id)
 	sensorId= Sensores.objects.get(id=sensoresTablas.id)
 	
-	serieout = serial_w('g',str(b'fermentadorArduinoId'))
-	time.sleep(2.5)
+	arduinoid = str(fermentadorArduinoId)
+	print(arduinoid)
+
+	try:
+		serieout = serial_w('g',arduinoid)
+		#time.sleep(2.5)
+		temp = serieout
+		print(temp)
+
+		if (int(temp) > 0 and int(temp) < 35):
+			TemperaturasHistorial.objects.create(fermentador=fermentadorId, sensorId=sensorId,
+				temperatura=temp,fechaSensado=ahora,coccionNumero=coccionId)
+			print("Seguardaron los datos de sensado")
+		else:
+			grabarTemperatura(procesoId,coccionId, fermentadorArduinoId, fermentadorId, sensorId)
+	except:
+		print("No se pudo recuperar el valor")
 	#print serieout
-	temp = int(serieout)
-	#print(temp)
-	#print fermentadorId[0][0]
-	if (temp > 0 and temp < 35 and temp != ""):
-		TemperaturasHistorial.objects.create(fermentador=fermentadorId, sensorId=sensorId,
-			temperatura=temp,fechaSensado=ahora,coccionNumero=coccionId)
-		print("Seguardaron los datos de sensado")
-	else:
-		grabarTemperatura(procesoId,coccionId, fermentadorArduinoId, fermentadorId, sensorId)
+	
 
 
 for procesoId in procesosActivos:

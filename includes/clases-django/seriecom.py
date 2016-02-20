@@ -6,6 +6,7 @@ import time
 from time import sleep
 import glob
 import serial
+import serial.tools.list_ports
 
 from estadoarduino import *
 
@@ -15,12 +16,8 @@ django.setup()
 
 # BUSQUEDA DE PUERTOS AARDUINO
 def serial_ports():
-    try:
-        ports = glob.glob('/dev/ttyUSB[0-10]*')
-
-    except:
-        ports = glob.glob('/dev/ttyACM[0-10]*')    
-    
+    #ports = glob.glob('/dev/ttyACM[0-10]*')
+    ports = glob.glob('/dev/ttyUSB[0-10]*')
     result = ""
     for port in ports:
         try:
@@ -32,21 +29,35 @@ def serial_ports():
             pass
     return result
 
+
+
 # LECTURA DE PUERTO SERIE
-def serial_w(mode,ferm,temp=''):
+def serial_w(mode='',ferm='',temp=''):
     port = serial_ports()
-    serie = serial.Serial(port,9600,timeout = 3)
-    temperatura =''
+    #port = '/dev/ttyUSB0'
+    serie = serial.Serial(port,9600,timeout = 1.0)
+    comando = str(mode) + str(ferm)
+    temperatura = ''
+   
+    time.sleep(1)
+    serie.write(bytes(comando.encode('ascii')))
+    with serie:        
+        try:
+            temperatura += serie.read(2).decode('UTF-8', 'ignore')
+        except:
+            print("no se pudo recuperar la temperatura")
 
-    if (mode == 's'):
-        serie.write(mode+ferm+temp)
-        print(mode+ferm+temp)
+    #print("Temperatura: " + temperatura)
+    return temperatura
 
-    elif (mode == 'g' or 'f'):
-        serie.write(mode+str(ferm)
-        time.sleep(0.1)
-        while serie.inWaiting() > 0:
-            temperatura += serie.read(1)
-        return temperatura
-        temperatura = ''
-    serie.close()
+
+
+
+
+
+
+
+
+
+
+
