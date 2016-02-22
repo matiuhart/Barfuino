@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 from django.db import models
 from django import forms
 #from datetime import datetime
@@ -64,14 +66,15 @@ class ControlProcesos(models.Model):
 	clarificadoFin = models.DateTimeField(verbose_name='Clarificado')
 	fase = models.CharField(max_length=15,default='fermentacion1')
 
-
-	def __str__(self):
-		return "%s,%s,%s,%s,%s,%s,%s," %(self.coccionNum, self.fechaInicio, self.fermentado1Fin, 
-			self.fermentado2Fin, self.maduradoFin,self.clarificadoFin, self.fase)
-
 	class Meta:
 		ordering = ["fermentador"]
 		verbose_name_plural = "Control de Procesos"
+
+	
+	def __str__(self):
+		return "%s,%s,%s,%s,%s,%s,%s," %(self.coccionNum, self.fechaInicio, self.fermentado1Fin, 
+			self.fermentado2Fin, self.maduradoFin,self.clarificadoFin, self.fase)
+	
 
 # TABLA HISTORIAL DE TEMPERATURAS
 class TemperaturasHistorial(models.Model):
@@ -82,9 +85,10 @@ class TemperaturasHistorial(models.Model):
 	coccionNumero = models.ForeignKey(ControlProcesos)
 	activo = models.BooleanField(default=True)
 
+	
 	def __str__(self):
 		 return "%s,%s,%s,%s,%s" %(self.coccionNumero,self.fermentador.id,self.fermentador,self.fechaSensado,self.temperatura)
-
+	
 	
 	class Meta:
 		ordering = ["fermentador"]

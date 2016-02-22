@@ -24,6 +24,6 @@ urlpatterns = [
     url(r'^procesosActivos/',procesosActivos),
     url(r'^crearperfil/',crearPerfTemp),
     url(r'^aplicarperfil/',aplicarPerfilTemp),
-    url(r'^configuraciones/',configuraciones),
+    #url(r'^configuraciones/',configuraciones),
     url(r'^$', home),
 ]

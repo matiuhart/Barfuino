@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from django.shortcuts import render, render_to_response
 from .models import *
 from .forms import *
@@ -6,6 +7,7 @@ from django.core.context_processors import csrf
 from datetime import datetime
 from datetime import timedelta
 import time
+from django.utils import timezone
 
 
 def sumar_mins(minutos=0):
@@ -20,17 +22,38 @@ def restart_mins(minutos=0):
 
 # Vista para el home
 def home(request):
-	grafica = [[sumar_mins(5), 25,34,10], [sumar_mins(8), 18,20,21], [sumar_mins(10), 17,19,10], [sumar_mins(17), 16,15,13], [sumar_mins(11), 15,17,10], [sumar_mins(50), 10,9,10]]
-	start_date = restart_mins(60)
+	start_date = restart_mins(4320)
 	end_date = datetime.now()
+	
+	registrosTemperaturas = TemperaturasHistorial.objects.order_by('id').filter(fermentador__activo__exact=True).filter(fechaSensado__range=(start_date,end_date)).values()
+	
+	fermentadorbtn = {}
 
+	grafica = []
+	# Armo array para grafica
+	for i in range(len(registrosTemperaturas)):
+		valores=[]
+		fecha = registrosTemperaturas[i]['fechaSensado'].astimezone(timezone.get_current_timezone())
+		valores.append(fecha.strftime("%Y-%m-%d %H:%M:%S"))
+		valores.append(str(registrosTemperaturas[i]['temperatura']))
+		grafica.append(valores)
+	
+	# Recupero fermentadores activos y su ultima temperatura para botones
 	try:
-		t = TemperaturasHistorial.objects.order_by('id').filter(fermentador__activo__exact=True).filter(fechaSensado__range=(start_date,end_date))
-	except:
-		t = ""
-	#fermentadorbtn= str(t.temperatura)
+		cocciones=[]
 
-	return render(request, 'home.html', {'values': grafica, 'fermentadorbtn':t})
+		for coccion in range(len(registrosTemperaturas)):
+		    cocciones.append(registrosTemperaturas[coccion]['coccionNumero_id'])
+		    cocciones = list(set(cocciones))
+		
+		for coccion in cocciones:
+			data = {}
+			ultimo = TemperaturasHistorial.objects.filter(coccionNumero_id=coccion).latest('fechaSensado')
+			data.update({ultimo.fermentador.nombre:str(ultimo.temperatura)})
+			fermentadorbtn.update(data)
+	except:
+		fermentadorbtn = ""
+	return render(request, 'home.html', {'values': grafica, 'fermentadorbtn':fermentadorbtn})
 
 
 # Vista para crear perfil de temperatura
@@ -113,20 +136,26 @@ def aplicarPerfilTemp(request):
 
 # Vista para pruebas	
 def pruebas(request):
-	start_date = restart_mins(60)
+	start_date = restart_mins(4320)
 	end_date = datetime.now()
+	
+	FermentadoresActivos = TemperaturasHistorial.objects.order_by('id').filter(fermentador__activo__exact=True).filter(fechaSensado__range=(start_date,end_date)).values()
+	fermentadorbtn = {}
+	cocciones=[]
 
-	try:
-		t = TemperaturasHistorial.objects.order_by('id').filter(fermentador__activo__exact=True).filter(fechaSensado__range=(start_date,end_date))
-	except:
-		t = ""
-	#fermentadorbtn= str(t.temperatura)
-
-	return render(request, 'pruebas.html', {'fermentadorbtn':t})
-
-def configuraciones(request):
-	hola="mundi"
-
+	for coccion in range(len(FermentadoresActivos)):
+	    cocciones.append(FermentadoresActivos[coccion]['coccionNumero_id'])
+	    cocciones = list(set(cocciones))
+	
+	for coccion in cocciones:
+		data = {}
+		ultimo = TemperaturasHistorial.objects.filter(coccionNumero_id=coccion).earliest('fechaSensado')
+		data.update({ultimo.fermentador.nombre:str(ultimo.temperatura)})
+		fermentadorbtn.update(data)
+			
+	
+	
+	return render(request, 'pruebas.html', {'fermentadorbtn':fermentadorbtn})
 
 '''
 #### EJEMPLO PARA METODO POST

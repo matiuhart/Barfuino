@@ -14,7 +14,7 @@ import glob
 from estadoarduino import buscarPorcesosActivos
 from django.utils import timezone
 
-sys.path.append("/home/mati/bin/django/barfuino")
+sys.path.append("/media/mati/cc6ff8ae-312f-44e3-b081-cca83b3f12de/mati/bin/django/barfuino")
 os.environ["DJANGO_SETTINGS_MODULE"] = "barfuino.settings"
 django.setup()
 
@@ -38,22 +38,25 @@ def grabarTemperatura(procesoId,coccionId,fermentadorArduinoId,fermentadorId,sen
 	sensorId= Sensores.objects.get(id=sensoresTablas.id)
 	
 	arduinoid = str(fermentadorArduinoId)
-	print(arduinoid)
+	
 
 	try:
 		serieout = serial_w('g',arduinoid)
-		#time.sleep(2.5)
 		temp = serieout
 		print(temp)
 
-		if (int(temp) > 0 and int(temp) < 35):
-			TemperaturasHistorial.objects.create(fermentador=fermentadorId, sensorId=sensorId,
-				temperatura=temp,fechaSensado=ahora,coccionNumero=coccionId)
-			print("Seguardaron los datos de sensado")
+		if temp:
+			if (int(temp == -127)):
+				print("El sensor no está conectado")
+			elif (int(temp) > 0 and int(temp) < 35):
+				TemperaturasHistorial.objects.create(fermentador=fermentadorId, sensorId=sensorId,
+					temperatura=temp,fechaSensado=ahora,coccionNumero=coccionId)
+				print("Seguardaron los datos de sensado")
 		else:
+			print("El valor de temperatura es nulo, se vuelve a consultar a arduino")
 			grabarTemperatura(procesoId,coccionId, fermentadorArduinoId, fermentadorId, sensorId)
 	except:
-		print("No se pudo recuperar el valor")
+		print("Ha ocurrido una excepcion, no se pudo recuperar el valor de temperatura")
 	#print serieout
 	
 

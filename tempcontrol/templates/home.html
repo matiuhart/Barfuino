@@ -5,8 +5,8 @@
 	<div class="jumbotron">
 		<div clas="fermentadoresbtn">
 		{% if fermentadorbtn %}
-			{% for fermentador in fermentadorbtn %}
-					<button type="button" class="btn btn-primary btn-lg">{{fermentador.fermentador}}<br> {{fermentador.temperatura}}°C</button>
+			{% for fermentador,temperatura in fermentadorbtn.items %}
+				<button type="button" class="btn btn-primary btn-lg">{{fermentador}}<br> {{temperatura}}°C</button>
 			{%endfor%}
 		{%endif%}
 		</div>
@@ -27,8 +27,7 @@
 				    {% data values "out_data" %}
 				        {% col "string" "Fecha" %}"{{ val }}"{% endcol %}
 				        {% col "number" "Fermentador1" %}{{ val }}{% endcol %}
-						{% col "number" "Fermentador2" %}{{ val }}{% endcol %}
-						{% col "number" "Fermentador3" %}{{ val }}{% endcol %}
+						
 				    {% enddata %}
 				    {# you can also use global javascript variables here, #}
 				    {# and call functions #}
@@ -52,17 +51,6 @@
 				    {% graph "out" "out_data" "out_options" %}
 
 				{% endgooglecharts %}
-				{{fermentador.fermentador}}<br> {{fermentadorbtn.temperatura}}
 		</div>
 	</div>
-	{{fermentador.fermentador}}<br> {{fermentadorbtn.temperatura}}
 {%endblock%}
-
-
-
-{% for fermentador in fermentadorbtn %}
-	<p>
-		{{fermentador.fermentador}}:{{fermentador.temperatura}}
-		<button type="button" class="btn btn-primary btn-lg">{{fermentador.fermentador}}<br> {{fermentador.temperatura}}°C</button>
-	</p>
-{%endfor%}

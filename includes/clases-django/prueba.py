@@ -10,7 +10,7 @@ import serial.tools.list_ports
 
 from estadoarduino import *
 
-sys.path.append("/media/mati/cc6ff8ae-312f-44e3-b081-cca83b3f12de/mati/bin/django/barfuino")
+sys.path.append("/home/mati/bin/django/barfuino")
 os.environ["DJANGO_SETTINGS_MODULE"] = "barfuino.settings"
 django.setup()
 
@@ -25,7 +25,7 @@ def serial_ports():
             s.close()
             result = port
         except (OSError, serial.SerialException):
-            print("Ha ocurrido un error, no se pudo estableecer conexión con arduino")
+            print("No se pudo estableecer conexion con arduino")
             pass
     return result
 
@@ -41,18 +41,23 @@ def serial_w(mode='',ferm='',temp=''):
    
     time.sleep(1)
     serie.write(bytes(comando.encode('ascii')))
+    
     with serie:        
         try:
-            temperatura += serie.read(4).decode('UTF-8', 'ignore')
+            temperatura += serie.read(2).decode('UTF-8', 'ignore')
         except:
-            print("Ha ocurrido un error,no se pudo recuperar la temperatura desde serie_w")
+            print("no se pudo recuperar la temperatura")
 
-    #print("Temperatura: " + temperatura)
+    #print(temperatura)
     return temperatura
 
 
-
-
+try:
+    while 1:
+        serial_w('g',1)
+        time.sleep(10)
+except KeyboardInterrupt:
+            print("\ndone")
 
 
 

@@ -8,7 +8,7 @@ import smtplib
 import django
 from tempcontrol.models import *
 
-sys.path.append("/home/mati/bin/django/barfuino")
+sys.path.append("/media/mati/cc6ff8ae-312f-44e3-b081-cca83b3f12de/mati/bin/django/barfuino")
 os.environ["DJANGO_SETTINGS_MODULE"] = "barfuino.settings"
 django.setup()
 

@@ -10,7 +10,7 @@ import serial.tools.list_ports
 
 from estadoarduino import *
 
-sys.path.append("/media/mati/cc6ff8ae-312f-44e3-b081-cca83b3f12de/mati/bin/django/barfuino")
+sys.path.append("/home/mati/bin/django/barfuino")
 os.environ["DJANGO_SETTINGS_MODULE"] = "barfuino.settings"
 django.setup()
 
@@ -34,21 +34,23 @@ def serial_ports():
 # LECTURA DE PUERTO SERIE
 def serial_w(mode='',ferm='',temp=''):
     port = serial_ports()
-    #port = '/dev/ttyUSB0'
+    #port = '/dev/ttyUSB1'
     serie = serial.Serial(port,9600,timeout = 1.0)
-    comando = str(mode) + str(ferm) + "\n"
+    comando = 'g1' + "\n"
     temperatura = ''
    
     time.sleep(1)
     serie.write(bytes(comando.encode('ascii')))
     with serie:        
         try:
-            temperatura += serie.read(4).decode('UTF-8', 'ignore')
+            temperatura += serie.read(2).decode('UTF-8', 'ignore')
         except:
             print("Ha ocurrido un error,no se pudo recuperar la temperatura desde serie_w")
 
-    #print("Temperatura: " + temperatura)
+    print("Temperatura: " + temperatura)
     return temperatura
+
+serial_w()
 
 
 
