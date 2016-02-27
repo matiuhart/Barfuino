@@ -32,7 +32,8 @@ def serial_w(mode='',ferm='',temp=''):
     port = serial_ports()
     #port = '/dev/ttyUSB0'
     serie = serial.Serial(port,9600,timeout = 1.0)
-    comando = str(mode) + str(ferm) + "\n"
+    comando = str(mode)+str(ferm)+str(temp)+"\n"
+    #print(comando)
     temperatura = ''
    
     time.sleep(1)
@@ -48,8 +49,8 @@ def serial_w(mode='',ferm='',temp=''):
 
 
 
-
-
+# Pruebas
+#serial_w('s','0','21')
 
 
 

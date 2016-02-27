@@ -63,7 +63,7 @@ def controlTemperaturaFase(id):
 			temperaturaFase = datosConfiguraciones.temperaturaFinalizado
 			controlFase.finalizado_()
 
-	print("\n PROCESOID: " + str(controlProcesoId) + "\n FERMENTADOR: " + str(datosProceso.fermentador) + "\n TEMPERATURA: " + str(temperaturaFase))
+	#print("\n PROCESOID: " + str(controlProcesoId) + "\n FERMENTADOR: " + str(datosProceso.fermentador) + "\n TEMPERATURA: " + str(temperaturaFase))
 	
 	# Recupero temperaturas sensadas de los ultimos 45' para el fermentador actual
 	ultimasTemperaturas = TemperaturasHistorial.objects.filter(fermentador=fermentadorId).filter(fechaSensado__gte=RestarMinutos(60)).values('temperatura')
