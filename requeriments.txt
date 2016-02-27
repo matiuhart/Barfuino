@@ -6,5 +6,6 @@ dateutils
 django-google-charts
 pyserial
 pytz
+django_extensions
 #south
 #gunicorn

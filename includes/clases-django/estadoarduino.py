@@ -66,12 +66,16 @@ def controlTemperaturaFase(id):
 	print("\n PROCESOID: " + str(controlProcesoId) + "\n FERMENTADOR: " + str(datosProceso.fermentador) + "\n TEMPERATURA: " + str(temperaturaFase))
 	
 	# Recupero temperaturas sensadas de los ultimos 45' para el fermentador actual
-	ultimasTemperaturas = TemperaturasHistorial.objects.filter(fermentador=fermentadorId).filter(fechaSensado__gte=RestarMinutos(45)).values('temperatura')
+	ultimasTemperaturas = TemperaturasHistorial.objects.filter(fermentador=fermentadorId).filter(fechaSensado__gte=RestarMinutos(60)).values('temperatura')
 
 	# Si encuentro valores de sensado, verifico si las ultimas 3 temperaturas son mayores que la correspondiente a la fase, si esto
 	# sucede o no se encuentran valores de sensado, se envia una alerta. De lo contrario no se realiza ninguna accion
 	if (ultimasTemperaturas):
-		temperatura1,temperatura2,temperatura3 = ultimasTemperaturas[0].get('temperatura'), ultimasTemperaturas[1].get('temperatura'),ultimasTemperaturas[2].get('temperatura')
+		try:
+			temperatura1,temperatura2,temperatura3 = ultimasTemperaturas[0].get('temperatura'), ultimasTemperaturas[1].get('temperatura'),ultimasTemperaturas[2].get('temperatura')
+		except:
+			print("Hay menos de tres registros de temperatura en los ultimos 60'")
+
 		CUERPO =""
 		ASUNTO =""
 		#si las ultimas 3 temperaturas son mayores a la de la fase envia alerta
