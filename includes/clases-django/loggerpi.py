@@ -11,14 +11,22 @@ from seriecom import serial_w
 from time import sleep
 from datetime import datetime, timedelta
 import glob
-from estadoarduino import buscarPorcesosActivos
+#from estadoarduino import buscarPorcesosActivos
 from django.utils import timezone
 from djangoPath import *
 
 
-#ahora = timezone.make_aware(datetime.now())
-ahora = datetime.now()
+ahora = timezone.make_aware(datetime.now())
+#ahora = datetime.now()
 #fecha=now.strftime('%Y-%m-%d %H:%M:%S')
+
+# Recupero procesos activos#####################################
+def buscarPorcesosActivos():
+    c = ControlProcesos.objects.filter(activo='True').values('id')
+    ids =[]
+    for i in range(len(c)):
+        ids.append(c[i].get('id'))
+    return ids
 
 procesosActivos = buscarPorcesosActivos()
 

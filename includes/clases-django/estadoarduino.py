@@ -7,20 +7,8 @@ import django
 from datetime import datetime
 from datetime import timedelta
 import time
-
-
-sys.path.append("/media/mati/cc6ff8ae-312f-44e3-b081-cca83b3f12de/mati/bin/django/barfuino")
-os.environ["DJANGO_SETTINGS_MODULE"] = "barfuino.settings"
-django.setup()
-from tempcontrol.models import *
-
-'''
-Estas funciones realizan el monitoreo de las temperaturas en los fermentadores. Verifica en la base de datos si el tiempo del ultimo 
-sensado de temperatura es menor a 45 minutos o si la temperatura se mantuvo por arriba de la correspondiente por mas del tiempo mencionado anterioirmente, 
-de ser mayor en cualquiera de los dos casos, envia una alerta via email con el aviso de problemas de sensado
-'''
-
-
+from djangoPath import *
+from fases import CambiarFase
 
 # Resta de minutos de medicion anterior
 def RestarMinutos(minutos=0):
@@ -107,4 +95,8 @@ def controlTemperaturaFase(id):
 		print("\n ASUNTO: " + ASUNTO)
 		print("------------------------------------------------------------------------------------------------------------------------------")
 
+activos = buscarPorcesosActivos()
 
+for i in activos:
+    print(i)
+    controlTemperaturaFase(i)

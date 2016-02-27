@@ -37,8 +37,8 @@ class ComprobarFase(object):
 
 ##### CLASE DE CAMBIO
 class CambiarFase(object):
-    #ahora = timezone.make_aware(datetime.now())
-    ahora = datetime.now()
+    ahora = timezone.make_aware(datetime.now())
+    #ahora = datetime.now()
     temperaturas = ['']
 
     def __init__(self,produccionEstadoId):
