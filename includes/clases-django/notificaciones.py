@@ -6,11 +6,7 @@ import sys
 import time
 import smtplib
 import django
-from tempcontrol.models import *
-
-sys.path.append("/media/mati/cc6ff8ae-312f-44e3-b081-cca83b3f12de/mati/bin/django/barfuino")
-os.environ["DJANGO_SETTINGS_MODULE"] = "barfuino.settings"
-django.setup()
+from djangoPath import *
 
 datosConfiguraciones = Configuraciones.objects.get()
 
@@ -33,8 +29,8 @@ def EnviarCorreo(ASUNTO,MENSAJE):
     header  = 'To:      ' + DESTINATARIO + '\n'         #Construimos el 'HEADER' para envíar el correo electrónico
     header += 'From:    ' + REMITENTE    + '\n'
     header += 'Subject: ' + ASUNTO       + '\n'
-    print header
+    print(header)
     msg = header + '\n' + MENSAJE + ' \n\n'             #Concatenamos el'HEADER' y el 'MENSAJE' del correo electrónico
     smtpserver.sendmail(REMITENTE, DESTINATARIO, msg)   #Envíamos el correo electrónico
     smtpserver.close()                                  #Cerramos la conexión con el SMTP server de Google
-    print "se cerro la conexion con el servidor"
+    print("se cerro la conexion con el servidor")

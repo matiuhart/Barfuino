@@ -7,12 +7,8 @@ from time import sleep
 import glob
 import serial
 import serial.tools.list_ports
-
-from estadoarduino import *
-
-sys.path.append("/media/mati/cc6ff8ae-312f-44e3-b081-cca83b3f12de/mati/bin/django/barfuino")
-os.environ["DJANGO_SETTINGS_MODULE"] = "barfuino.settings"
-django.setup()
+#from estadoarduino import *
+from djangoPath import *
 
 # BUSQUEDA DE PUERTOS AARDUINO
 def serial_ports():

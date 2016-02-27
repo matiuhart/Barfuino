@@ -8,14 +8,19 @@ from datetime import datetime
 from datetime import timedelta
 import time
 from django.utils import timezone
-from tempcontrol.models import *
 from seriecom import *
 from notificaciones import *
-from estadoarduino import *
+#from estadoarduino import *
+from djangoPath import *
 
-sys.path.append("/media/mati/cc6ff8ae-312f-44e3-b081-cca83b3f12de/mati/bin/django/barfuino")
-os.environ["DJANGO_SETTINGS_MODULE"] = "barfuino.settings"
-django.setup()
+
+# Recupero procesos activos#####################################
+def buscarPorcesosActivos():
+    c = ControlProcesos.objects.filter(activo='True').values('id')
+    ids =[]
+    for i in range(len(c)):
+        ids.append(c[i].get('id'))
+    return ids
 
 
 # Clase para comprobacion de fase actual
@@ -32,7 +37,8 @@ class ComprobarFase(object):
 
 ##### CLASE DE CAMBIO
 class CambiarFase(object):
-    ahora = timezone.make_aware(datetime.now())
+    #ahora = timezone.make_aware(datetime.now())
+    ahora = datetime.now()
     temperaturas = ['']
 
     def __init__(self,produccionEstadoId):
@@ -42,7 +48,7 @@ class CambiarFase(object):
 
         CambiarFase.fermentadorId = self.datosProceso.fermentador_id
         CambiarFase.fermentadorNombre = self.datosProceso.fermentador
-        CambiarFase.arduinoId = self.datosProceso.fermentador.arduinoId
+        CambiarFase.arduinoId = self.datosProceso.fermentador.arduinoId - 1
         CambiarFase.temperaturas = self.datosProceso.temperaturaPerfil.temperaturas
         CambiarFase.fase = self.datosProceso.fase
         CambiarFase.fermentado1 = self.datosProceso.fermentado1Fin
@@ -58,7 +64,7 @@ class CambiarFase(object):
                 ControlProcesos.objects.filter(id=self.estadoId).update(fase="madurado")
 
                 # Escribo la nueva temperatura en el puerto serie de arduino                
-                #serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[2]))
+                serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[2]))
                 print('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[2]))
                 return "madurado"
             # Cambio a fermentado 2
@@ -66,12 +72,12 @@ class CambiarFase(object):
                 ControlProcesos.objects.filter(id=self.estadoId).update(fase="fermentado2")
 
                 # Escribo la nueva temperatura en el puerto serie de arduino                
-                #serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[1]))
+                serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[1]))
                 print('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[1]))
             return "fermentado2"
         #Mantengo fermentado 1
         else:
-            #serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[0]))
+            serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[0]))
             print('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[0]))
             return "fermentado1"
 
@@ -82,12 +88,12 @@ class CambiarFase(object):
                 ControlProcesos.objects.filter(id=self.estadoId).update(fase="madurado")
 
                 # Escribo la nueva temperatura en el puerto serie de arduino   
-                #serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[2]))
+                serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[2]))
                 print('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[2]))
                 return "madurado"
             # Mantengo fermentado 2
             else:
-                #serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[1]))
+                serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[1]))
                 print('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[1]))
                 return "fermentado2"
         return "sin fermentado 2"
@@ -97,15 +103,15 @@ class CambiarFase(object):
         if CambiarFase.ahora > CambiarFase.madurado:
             ControlProcesos.objects.filter(id=self.estadoId).update(fase="clarificado")
             try:
-                #serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[3]))
+                serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[3]))
                 print('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[3]))
             except:
-                #serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.datosConfiguraciones.temperaturaClarificado))
+                serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.datosConfiguraciones.temperaturaClarificado))
                 print('s',str(CambiarFase.arduinoId),str(CambiarFase.datosConfiguraciones.temperaturaClarificado))
             return "clarificado"
         # Sigue en madurado
         else:
-            #serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[2]))
+            serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[2]))
             print('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[2]))
             return "madurado"
 
@@ -114,19 +120,19 @@ class CambiarFase(object):
         if CambiarFase.ahora > CambiarFase.clarificado:
             ControlProcesos.objects.filter(id=self.estadoId).update(fase="finalizado")
             try:
-                #serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[4]))
+                serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[4]))
                 print('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[4]))
             except:
-                #serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.datosConfiguraciones.temperaturaFinalizado))
+                serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.datosConfiguraciones.temperaturaFinalizado))
                 print('s',str(CambiarFase.arduinoId),str(CambiarFase.datosConfiguraciones.temperaturaFinalizado))
             return "finalizado"
         # Sigue en clarificado
         else:
             try:
-                #serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[3]))
+                serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[3]))
                 print('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[3]))
             except:
-                #serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.datosConfiguraciones.temperaturaClarificado))
+                serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.datosConfiguraciones.temperaturaClarificado))
                 print('s',str(CambiarFase.arduinoId),str(CambiarFase.datosConfiguraciones.temperaturaClarificado))
             return "clarificado"
 
@@ -136,7 +142,7 @@ class CambiarFase(object):
             print('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[4]))
 
         except:
-            #serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.datosConfiguraciones.temperaturaFinalizado))
+            serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.datosConfiguraciones.temperaturaFinalizado))
             print('s',str(CambiarFase.arduinoId),str(CambiarFase.datosConfiguraciones.temperaturaFinalizado))
         return "finalizado"
 
@@ -151,61 +157,8 @@ class CambiarFase(object):
 2 Mad
 3 clar
 4 final
-'''
-# FUNCION PARA MONITOREO
-def MonitorEstados(ControlProcesosId):
-    estadoid = ControlProcesosId
-    faseEstado = ComprobarFase(ControlProcesosId)
-    faseCambio = CambiarFase(ControlProcesosId)
-    faseActual = faseEstado.faseActual()
 
-    print ("Fase actual: " + str(faseActual))
+activos = buscarPorcesosActivos()
 
-    if (faseActual == 2):
-        fermentacion1 = faseCambio.fermentacion_1()
-
-        print ("Cambio de fase?: " + str(fermentacion1))
-
-        if (fermentacion1 == 0):
-            print("Esta en fermentacion_1 y se mantiene fase en estadoid %s"%(estadoid))
-        elif (fermentacion1 == 1):
-            print ("Se realiza cambio a fase fermentacion_2 en estadoid %s"%(estadoid))
-        elif (fermentacion1 == 2):
-            print ("Se realiza cambio a fase maduracion en estadoid %s"%(estadoid))
-        else:
-            print ("No es posible determinar el fin de la fermentacion 1 en estadoid %s"%(estadoid))
-
-    elif (faseActual == 3):
-        fermentacion2 = faseCambio.fermentacion_2()
-        print ("Cambio de fase?: " + str(fermentacion2))
-
-        if (fermentacion2 == 0):
-            print ("Esta en fermentacion_2 y se mantiene fase en estadoid %s"%(estadoid))
-        elif (fermentacion2 == 1):
-            print ("Se realiza cambio a fase maduracion en estadoid %s"%(estadoid))
-        else:
-            print ("No es posible determinar el fin de la fermentacion 2 en estadoid %s"%(estadoid))
-
-    elif (faseActual == 4):
-        maduracion = faseCambio.maduracion()
-        print ("Cambio de fase?: " + str(maduracion))
-
-        if (maduracion == 0):
-            print ("Esta en maduracion y se mantiene fase en estadoid %s"%(estadoid))
-        elif (maduracion == 1):
-            print ("Fin de maduracion")
-        else:
-            print ("No es posible determinar el fin de la maduracion en estadoid %s"%(estadoid))
-
-    elif (faseActual == 5):
-        print ("Proceso finalizado, se mantiene la temperatura de proceso finalizado en estadoid %s"%(estadoid))
-
-# FUNCION DE PRUEBAS
-def BuscarActivos():
-    query ="SELECT id FROM ControlProcesos WHERE activo = 'T'"
-    consulta = MysqlQuery(query)
-    activas = consulta.runQueryAsBasic()
-    for row in activas:
-        MonitorEstados(row)
-
-BuscarActivos()
+for i in activos:
+'''    

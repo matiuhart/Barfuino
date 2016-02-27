@@ -13,14 +13,11 @@ from datetime import datetime, timedelta
 import glob
 from estadoarduino import buscarPorcesosActivos
 from django.utils import timezone
+from djangoPath import *
 
-sys.path.append("/media/mati/cc6ff8ae-312f-44e3-b081-cca83b3f12de/mati/bin/django/barfuino")
-os.environ["DJANGO_SETTINGS_MODULE"] = "barfuino.settings"
-django.setup()
 
-from tempcontrol.models import *
-
-ahora = timezone.make_aware(datetime.now())
+#ahora = timezone.make_aware(datetime.now())
+ahora = datetime.now()
 #fecha=now.strftime('%Y-%m-%d %H:%M:%S')
 
 procesosActivos = buscarPorcesosActivos()
@@ -37,7 +34,7 @@ def grabarTemperatura(procesoId,coccionId,fermentadorArduinoId,fermentadorId,sen
 	coccionId = ControlProcesos.objects.get(id=procesosTablas.id)
 	sensorId= Sensores.objects.get(id=sensoresTablas.id)
 	
-	arduinoid = str(fermentadorArduinoId)
+	arduinoid = str(fermentadorArduinoId - 1)
 	
 
 	try:
