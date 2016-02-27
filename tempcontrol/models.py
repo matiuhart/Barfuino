@@ -64,7 +64,7 @@ class ControlProcesos(models.Model):
 	fermentado2Fin = models.DateTimeField(verbose_name='Fermentado 2',blank=True,null=True,default="")
 	maduradoFin = models.DateTimeField(verbose_name='Madurado')
 	clarificadoFin = models.DateTimeField(verbose_name='Clarificado')
-	fase = models.CharField(max_length=15,default='fermentacion1')
+	fase = models.CharField(max_length=15,default='fermentado1')
 
 	class Meta:
 		ordering = ["fermentador"]
