@@ -40,6 +40,7 @@ def buscarPorcesosActivos():
 ###############################################################
 
 def controlTemperaturaFase(id):
+	controlFase = CambiarFase(id)
 	controlProcesoId = id
 	datosProceso = ControlProcesos.objects.get(id=controlProcesoId)
 	datosConfiguraciones = Configuraciones.objects.get()
@@ -54,20 +55,25 @@ def controlTemperaturaFase(id):
 	temperaturaFase = 0
 	if (faseActual == "fermentado1"):
 		temperaturaFase = temperaturas.split(",")[0]
+		controlFase.fermentado_1_()
 	elif (faseActual == "fermentado2"):
 		temperaturaFase = temperaturas.split(",")[1]
+		controlFase.fermentado_2_()
 	elif (faseActual == "madurado"):
 		temperaturaFase = temperaturas.split(",")[2]
+		controlFase.madurado_()
 	elif (faseActual == "clarificado"):
 		try:
 			temperaturaFase = temperaturas.split(",")[3]
 		except:
 			temperaturaFase = datosConfiguraciones.temperaturaClarificado
+			controlFase.clarificado_()
 	elif (faseActual == "finalizado"):
 		try:
 			temperaturaFase = temperaturas.split(",")[4]
 		except:
 			temperaturaFase = datosConfiguraciones.temperaturaFinalizado
+			controlFase.finalizado_()
 
 	print("\n PROCESOID: " + str(controlProcesoId) + "\n FERMENTADOR: " + str(datosProceso.fermentador) + "\n TEMPERATURA: " + str(temperaturaFase))
 	
