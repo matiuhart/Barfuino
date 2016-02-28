@@ -1,22 +1,14 @@
 {%extends 'base.html'%}
 
 {%block content%}
-	<legend>Dashboard</legend>
-	<div class="jumbotron">
-		<div clas="fermentadoresbtn">
-		{% if fermentadorbtn %}
-			{% for fermentador,temperatura in fermentadorbtn.items %}
-				<button type="button" class="btn btn-primary btn-lg">{{fermentador}}<br> {{temperatura}}°C</button>
-			{%endfor%}
-		{%endif%}
-		</div>
-		{%if not fermentadorbtn %}
-		<div class="alert alert-dismissible alert-warning">
-  			<button type="button" class="close" data-dismiss="alert"></button>
-  			<h4>ATENCION! </h4>
-  			<p>No hay registros de temperatura de ningun fermentador en los últimos 10 minutos.</a></p>
-		</div>
-		{%endif%}
-		</div>
-	</div>
+	<head>
+    <!-- code to include the highcharts and jQuery libraries goes here -->
+    <!-- load_charts filter takes a comma-separated list of id's where -->
+    <!-- the charts need to be rendered to                             -->
+    {% load chartit %}
+    {{ temperaturas|load_charts:"container" }}
+</head>
+<body>
+    <div id='container'> Chart will be rendered here </div>
+</body>
 {%endblock%}

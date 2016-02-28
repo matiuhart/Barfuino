@@ -18,7 +18,7 @@ DESTINATARIO = datosConfiguraciones.brewerMail
 REMITENTE = 'barfuino@mtu-it.com.ar'
 
 
-def EnviarCorreo(ASUNTO,MENSAJE):
+def enviarCorreo(ASUNTO,MENSAJE):
 
     print("Envíando e-mail")
     smtpserver = smtplib.SMTP("smtp.gmail.com",25)     #Definimos el objeto 'smtpserver' con smptlib.SMTP, SMTP("",) Administra la conexión SMTP
@@ -30,7 +30,8 @@ def EnviarCorreo(ASUNTO,MENSAJE):
     header += 'From:    ' + REMITENTE    + '\n'
     header += 'Subject: ' + ASUNTO       + '\n'
     print(header)
-    msg = header + '\n' + MENSAJE + ' \n\n'             #Concatenamos el'HEADER' y el 'MENSAJE' del correo electrónico
+    msg = header + '\n' + str(MENSAJE.encode('utf-8')) + ' \n\n'             #Concatenamos el'HEADER' y el 'MENSAJE' del correo electrónico
+    #msg = header + '\n' + "hola mundo" + ' \n\n'
     smtpserver.sendmail(REMITENTE, DESTINATARIO, msg)   #Envíamos el correo electrónico
     smtpserver.close()                                  #Cerramos la conexión con el SMTP server de Google
     print("se cerro la conexion con el servidor")

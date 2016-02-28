@@ -9,6 +9,7 @@ from datetime import timedelta
 import time
 from djangoPath import *
 from fases import CambiarFase
+from notificaciones import enviarCorreo
 
 # Resta de minutos de medicion anterior
 def RestarMinutos(minutos=0):
@@ -80,10 +81,10 @@ def controlTemperaturaFase(id):
 		ASUNTO =""
 		#si las ultimas 3 temperaturas son mayores a la de la fase envia alerta
 		if ((temperatura1 > int(temperaturaFase)) & (temperatura2 > int(temperaturaFase)) & (temperatura3 > int(temperaturaFase))):
-			CUERPO = 'En los ultimos 45 min las temperaturas exeden los %s° C seteados, las ultimas mediciones son %s° C'%(temperaturaFase,temperaturas)
+			CUERPO = 'En los ultimos 45 min las temperaturas exeden los %s° C seteados, las ultimas mediciones son %s,%s,%s°C'%(temperaturaFase,temperatura1,temperatura2,temperatura3)
 			ASUNTO = 'Temperaturas Altas en Fermentador %s'%(datosProceso.fermentador)
 
-			#EnviarCorreo(ASUNTO,CUERPO)
+			enviarCorreo(ASUNTO,CUERPO)
 		else:
 			print("\n NO HAY ALERTAS \n")
 			
@@ -91,7 +92,7 @@ def controlTemperaturaFase(id):
 		CUERPO = 'En los ultimos 45 min las temperaturas no pudieron ser sensadas en el fermentador %s, por favor verifique el sistema'%(datosProceso.fermentador)
 		ASUNTO = 'Problema de Sensado de Temperaturas en Fermentador %s'%(datosProceso.fermentador)
 
-		#EnviarCorreo(ASUNTO,CUERPO)
+		enviarCorreo(ASUNTO,CUERPO)
 
 	print("\n FASE ACTUAL: " + faseActual)
 	if (CUERPO):

@@ -43,6 +43,11 @@ class TemperaturasPerfiles(models.Model):
 	diasMadurado = models.IntegerField(verbose_name='días Madurado',validators=[MaxValueValidator(99),MinValueValidator(1)])
 	diasclarificado = models.IntegerField(verbose_name='días Clarificado',validators=[MaxValueValidator(99),MinValueValidator(1)])	
 	temperaturas = models.CommaSeparatedIntegerField(max_length=14)#validators=[validate_comma_separated_integer_list('0,0,0')]
+	temperaturasFermentado1 = models.CommaSeparatedIntegerField(max_length=5,null=True)
+	temperaturasFermentado2 = models.CommaSeparatedIntegerField(max_length=5,null=True)
+	temperaturasMadurado = models.CommaSeparatedIntegerField(max_length=5,null=True)
+	temperaturasClarificado = models.CommaSeparatedIntegerField(max_length=5,null=True)
+	temperaturasFinalizado = models.CommaSeparatedIntegerField(max_length=5,null=True)	
 	descripcion = models.CharField(max_length=200,verbose_name='descripción')
 
 	def __str__(self):
@@ -106,3 +111,15 @@ class Configuraciones(models.Model):
 
 
 
+'''
+temperaturaMaxFermentado1 =
+	temperaturaMinFermentado1 =
+	temperaturaMaxFermentado2 =
+	temperaturaMinFermentado2 =
+	temperaturaMaxMadurado =
+	temperaturaMinMadurado =
+	temperaturaMaxClarificado =
+	temperaturaMinClarificado =
+	temperaturaMaxFinalizado = 
+	temperaturaMinFinalizado = 
+'''

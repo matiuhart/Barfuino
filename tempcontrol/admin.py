@@ -35,7 +35,8 @@ class ControlProcesosAdmin(admin.ModelAdmin):
 
 class TemperaturasPerfilesAdmin(admin.ModelAdmin):
 	list_display = ('nombre','diasFermentado1','diasFermentado2','diasMadurado','diasclarificado',
-	'temperaturas','descripcion') # Autores redefinida en modelo por se ManyToMany
+	'temperaturas','temperaturasFermentado1','temperaturasFermentado2','temperaturasMadurado',
+	'temperaturasClarificado','temperaturasFinalizado','descripcion') # Autores redefinida en modelo por se ManyToMany
 	list_filter = ('diasFermentado1','diasFermentado2','diasMadurado','diasclarificado')
 	ordering = ('nombre',)
 	#fields = ('coccionNum','fermentador','sensor','temperaturaPerfil','activo')
@@ -60,8 +61,6 @@ admin.site.register(TemperaturasHistorial,TemperaturasHistorialAdmin)
 admin.site.register(TemperaturasPerfiles,TemperaturasPerfilesAdmin)
 admin.site.register(ControlProcesos,ControlProcesosAdmin)
 admin.site.register(Configuraciones,ConfiguracionesAdmin)
-
-
 
 
 

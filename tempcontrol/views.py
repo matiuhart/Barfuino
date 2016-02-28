@@ -8,6 +8,7 @@ from datetime import datetime
 from datetime import timedelta
 import time
 from django.utils import timezone
+#from chartit import DataPool, Chart
 
 
 def sumar_mins(minutos=0):
@@ -136,27 +137,17 @@ def aplicarPerfilTemp(request):
 
 # Vista para pruebas	
 def pruebas(request):
-	start_date = restart_mins(4320)
-	end_date = datetime.now()
+	'''
+	temperaturas = \
+		DataPool(series=[{'options':{'source:' TemperaturasHistorial.objects.all()},
+			'terms':['fechaSensado','fermentador''temperatura']}])
 	
-	FermentadoresActivos = TemperaturasHistorial.objects.order_by('id').filter(fermentador__activo__exact=True).filter(fechaSensado__range=(start_date,end_date)).values()
-	fermentadorbtn = {}
-	cocciones=[]
-
-	for coccion in range(len(FermentadoresActivos)):
-	    cocciones.append(FermentadoresActivos[coccion]['coccionNumero_id'])
-	    cocciones = list(set(cocciones))
-	
-	for coccion in cocciones:
-		data = {}
-		ultimo = TemperaturasHistorial.objects.filter(coccionNumero_id=coccion).earliest('fechaSensado')
-		data.update({ultimo.fermentador.nombre:str(ultimo.temperatura)})
-		fermentadorbtn.update(data)
+	cht = Chart(datasource = temperaturas,series_options = [{'options':{'type': 'line','stacking':'False'},
+		'terms':{'fechaSensado'['fermentador','temperatura']}}],
+		chart_options = {{'title': {'text': 'Fecha'}}})
 			
-	
-	
-	return render(request, 'pruebas.html', {'fermentadorbtn':fermentadorbtn})
-
+	return render_to_response({'weatherchart': cht})
+'''
 '''
 #### EJEMPLO PARA METODO POST
 def contactos(request):
