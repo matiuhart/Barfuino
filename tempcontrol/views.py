@@ -79,6 +79,58 @@ def procesosActivos(request):
 	return render(request, 'activos.html', {'activos':activos})
 
 
+def pruebas(request):
+	# Funcion para calculo de dias
+	def sumar_dias(dias=0):
+		fecha = datetime.now() + timedelta(days=dias)
+		nueva_fecha = fecha.strftime("%Y-%m-%d %H:%M:%S")
+		return nueva_fecha
+
+	if request.POST:
+		form = ControlPocesosCrearForm(request.POST)
+		if form.is_valid():
+			perfilNombre = request.GET['temperaturaPerfil']
+			fermentadorNombre = request.GET['fermentador']
+			coccionNumero = request.GET['coccionNum']
+
+			
+			perfilTablas = TemperaturasPerfiles.objects.get(nombre=perfilNombre)
+			fermentadorTablas = Fermentadores.objects.get(nombre=fermentadorNombre)
+			
+			# Calculo las fechas de finalizado de cada fase en base a dias especificados en TemperaturasPerfiles
+			finFermentado1 = sumar_dias(perfilTablas.diasFermentado1)
+			finFermentado2 = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2)
+			finMadurado = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2 + perfilTablas.diasMadurado)
+			finClarificado = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2 + 
+				perfilTablas.diasMadurado + perfilTablas.diasclarificado)
+
+			#Instancio para insersion en ControlProcesos
+			s=Sensores.objects.get(id=fermentadorTablas.sensor.id)
+			f=Fermentadores.objects.get(id=fermentadorTablas.id)
+			p=TemperaturasPerfiles.objects.get(id=perfilTablas.id)
+
+			#Actualizo Fermentadores.activo a True para que no sea mostrado nuevamente
+			Fermentadores.objects.filter(id=fermentadorTablas.id).update(activo=True)
+			
+			# Inserto los datos para nuevo proceso en ControlProcesos
+			ControlProcesos.objects.create(coccionNum=coccionNumero,fechaInicio=datetime.now(),fermentador=f,
+				sensor=s,temperaturaPerfil=p,activo=True,fermentado1Fin=finFermentado1,
+				fermentado2Fin=finFermentado2,maduradoFin=finMadurado,clarificadoFin=finClarificado)
+
+			form.save()
+			return HttpResponseRedirect('home.html')
+	
+
+	else:
+		form = ControlPocesosCrearForm()
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+
+	return render_to_response('pruebas.html', args)
+
+###############################################################################################################
+
 # Vista para aplicar perfil de temperatura
 def aplicarPerfilTemp(request):
 	
@@ -134,6 +186,8 @@ def aplicarPerfilTemp(request):
 			
 			return render_to_response('aplicarperfil.html', args)
 
+'''
+# GRAFICA PYGAL
 
 import pygal
 # Vista para pruebas	
@@ -178,5 +232,5 @@ def pruebas(request):
     	(datetime(2013, 2, 22, 9, 45), 9)])
 
 	return render_to_response('pruebas.html', {'line_chart':datetimeline.render()})
-
+'''
 
