@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'tempcontrol',
     'bootstrapform',
     'googlecharts',
+    'pygal',
     
     #'django_extensions',
     

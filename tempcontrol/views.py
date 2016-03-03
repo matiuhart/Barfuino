@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+from django.http import HttpResponse
 from django.shortcuts import render, render_to_response
 from .models import *
 from .forms import *
@@ -8,7 +9,6 @@ from datetime import datetime
 from datetime import timedelta
 import time
 from django.utils import timezone
-#from chartit import DataPool, Chart
 
 
 def sumar_mins(minutos=0):
@@ -133,55 +133,50 @@ def aplicarPerfilTemp(request):
 			args['fermentadores'] = fermentadores
 			
 			return render_to_response('aplicarperfil.html', args)
-		
 
+
+import pygal
 # Vista para pruebas	
-def pruebas(request):
-	'''
-	temperaturas = \
-		DataPool(series=[{'options':{'source:' TemperaturasHistorial.objects.all()},
-			'terms':['fechaSensado','fermentador''temperatura']}])
-	
-	cht = Chart(datasource = temperaturas,series_options = [{'options':{'type': 'line','stacking':'False'},
-		'terms':{'fechaSensado'['fermentador','temperatura']}}],
-		chart_options = {{'title': {'text': 'Fecha'}}})
-			
-	return render_to_response({'weatherchart': cht})
-'''
-'''
-#### EJEMPLO PARA METODO POST
-def contactos(request):
-	if request.method == 'POST':
-		form = FormularioContactos(request.POST)
-		if form.is_valid():
-			cd = form.cleaned_data
-			send_mail(cd['asunto'],cd['mensaje'],cd.get('email',
-				'noreply@mtu-it.com.ar'),['siteowner@mtu-it.com.ar'])
-			return render_to_response('gracias.html',{'mensaje':cd.get('mensaje'), 
-				'asunto':cd.get('asunto'),'email':cd.get('email')})
-	else:
-		form = FormularioContactos(initial={'asunto':"que buen sitio!",
-			'email':"mi@mail.com",'mensaje':"sarasaaaaaaaaaaa"})
-	return render(request,'formulario-contactos.html',{'form':form})
+from pygal.style import DefaultStyle
+from pygal.style import NeonStyle
+from pygal.style import LightGreenStyle
+from datetime import datetime, timedelta
 
 def pruebas(request):
-	if request.POST:
-		perfilForm = PerfilTempForm(request.POST)
-		fermentadorForm = FermentadorForm(request.POST)
-		if perfilForm.is_valid() and fermentadorForm.is_valid:
-			perfilForm.save()
-			fermentadorForm.save()
-			return HttpResponseRedirect('/')
-	else:
-		perfilForm = PerfilTempForm()
-		fermentadorForm = FermentadorForm()
+	start_date = restart_mins(4320)
+	end_date = datetime.now()
 
-	args = {}
-	args.update(csrf(request))
-	args['perfilForm'] = perfilForm
-	args['fermentadorForm'] = fermentadorForm
+	registrosTemperaturas = TemperaturasHistorial.objects.order_by('id').filter(fermentador__activo__exact=True).filter(fechaSensado__range=(start_date,end_date)).values()
 
-	
-	return render_to_response('pruebas.html', args)
-'''
+	datetimeline = pygal.DateTimeLine(
+		tooltip_border_radius=10,
+		height=300,
+		style=LightGreenStyle,
+		x_label_rotation=10, truncate_label=-1,
+		x_value_formatter=lambda dt: dt.strftime('%d/%M/%Y %I:%M:%S'))
+
+	grafica = []
+	# Armo array para grafica
+	for i in range(len(registrosTemperaturas)):
+		valores=[]
+		fecha = registrosTemperaturas[i]['fechaSensado'].astimezone(timezone.get_current_timezone())
+		valores.append(fecha.strftime("%Y-%m-%d %H:%M:%S"))
+		valores.append(str(registrosTemperaturas[i]['temperatura']))
+		grafica.append(valores)
+
+	datetimeline.add(
+		"Serie", [
+    	(datetime(2013, 1, 2, 12, 0), 20),
+    	(datetime(2013, 1, 12, 14, 30, 45), 30),
+    	(datetime(2013, 2, 2, 6), 18),
+    	(datetime(2013, 2, 22, 9, 45), 21)])
+	datetimeline.add(
+    	"prueba",[
+    	(datetime(2013, 2,3, 10, 0),10),
+    	(datetime(2013, 1, 10, 14, 30, 45), 11),
+    	(datetime(2013, 2, 2, 6), 10),
+    	(datetime(2013, 2, 22, 9, 45), 9)])
+
+	return render_to_response('pruebas.html', {'line_chart':datetimeline.render()})
+
 
