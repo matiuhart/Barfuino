@@ -1,28 +1,29 @@
-{%extends 'base.html'%}
+%extends 'base.html'%}
 {% load bootstrap %}
 
 {%block content%}
-	<legend>Crear controlProceso</legend>
+    <legend>Crear controlProceso</legend>
 <div class="jumbotron">
-	<form class="form-horizontal" action="/crearperfil/" method="post">{% csrf_token %}
-		<fieldset>	   		
-			<div class="form-group">
-				<div class="col-lg-5">
-					{{ form|bootstrap_horizontal:'col-lg-2'}}
-				</div>
-			</div>
-			<div class="col-lg-10 col-lg-offset-2">
-				<button type="reset" class="btn btn-default">Cancelar</button>
-				<button type="submit" class="btn btn-primary">Aplicar</button>
-			</div>
-		</fieldset>
-	</form>
+    <form class="form-horizontal" action="/pruebas/" method="post">{% csrf_token %}
+        <fieldset>          
+            <div class="form-group">
+                <div class="col-lg-5">
+                    {{ form|bootstrap_horizontal:'col-lg-2'}}
+                </div>
+            </div>
+            <div class="col-lg-10 col-lg-offset-2">
+                <button type="reset" class="btn btn-default">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Aplicar</button>
+            </div>
+        </fieldset>
+    </form>
 </div>
+{{valores}}
 
 
 {%endblock%}
 
 GRAFICA
 <picture>{{ line_chart|safe  }}</picture>
-	
+    
 <script type="text/javascript" src="http://kozea.github.com/pygal.js/latest/pygal-tooltips.min.js"></script>

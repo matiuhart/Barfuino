@@ -25,9 +25,9 @@ class SensoresAdmin(admin.ModelAdmin):
 class ControlProcesosAdmin(admin.ModelAdmin):
 	list_display = ('id','coccionNum','fermentador','temperaturaPerfil','fechaInicio',
 	'fermentado1Fin','fermentado2Fin','maduradoFin','clarificadoFin','fase','coccionNum','activo') # Autores redefinida en modelo por se ManyToMany
-	list_filter = ('coccionNum','fermentador','sensor','temperaturaPerfil','fase','activo')
+	list_filter = ('coccionNum','fermentador','temperaturaPerfil','fase','activo')
 	ordering = ('fermentador',)
-	fields = ('coccionNum','fermentador','sensor','temperaturaPerfil','fechaInicio',
+	fields = ('coccionNum','fermentador','temperaturaPerfil','fechaInicio',
 	'fermentado1Fin','fermentado2Fin','maduradoFin','clarificadoFin','fase','activo') #Cambia orden y campos mostrados en edicion
 	#filter_horizontal = ('autores',) # Solo trabajan con campos ManyToMany
 	#filter_vertical = ('autores',)

@@ -6,6 +6,16 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator,MinValueValidator,validate_comma_separated_integer_list
 
+# Clase con manager propio (Devuelve activos sin posibilidad de filtrar)
+class miManager(models.Manager):
+	def buscar_activos(self):
+		return self.filter(activo=True)
+
+# Clase con manager propio (Devuelve activos con posibilidad de filtrar)
+class MiManagerActivos(models.Manager):
+	def get_query_set(self):
+		return super(MiManagerActivos,self).get_query_set().filter(activo=False)
+
 # TABLA SENSORES
 class Sensores(models.Model):
 	nombre = models.CharField(max_length=10)
@@ -26,6 +36,12 @@ class Fermentadores(models.Model):
 	activo = models.BooleanField(default=False)
 	sensor = models.ForeignKey(Sensores)
 	arduinoId = models.IntegerField(verbose_name="Identificador en Arduino",validators=[MaxValueValidator(99),MinValueValidator(1)], default=1)
+	# Defino mi manager para consultas precocinadas
+	miManager = miManager()
+	# Defino manager para verificar estado pasado como parametro con posibilidad de filtrado (query set)
+	miManagerAct = MiManagerActivos()
+	# Defino manager por defecto
+	objects = models.Manager()
 
 
 	def __str__(self):
@@ -62,7 +78,7 @@ class ControlProcesos(models.Model):
 	coccionNum = models.IntegerField(verbose_name='Nro. cocción',unique=True,validators=[MaxValueValidator(400),MinValueValidator(1)])
 	fechaInicio = models.DateTimeField(blank=True,null=True,verbose_name='Inicio de proceso')
 	fermentador = models.ForeignKey(Fermentadores)
-	sensor = models.ForeignKey(Sensores)
+	#sensor = models.ForeignKey(Sensores)
 	temperaturaPerfil = models.ForeignKey(TemperaturasPerfiles,verbose_name='Perf. Temperatura')
 	activo = models.BooleanField(default=True)
 	fermentado1Fin = models.DateTimeField(verbose_name='Fermentado 1')
@@ -103,23 +119,3 @@ class Configuraciones(models.Model):
 	temperaturaClarificado = models.DecimalField("Temperatura de Clarificado por Defecto",max_digits=3, decimal_places=1,null=True)
 	temperaturaFinalizado = models.DecimalField("Temperatura de Finalizado por Defecto",max_digits=3, decimal_places=1,null=True)
 	brewerMail = models. EmailField(max_length=100,null=True)
-
-
-
-
-
-
-
-
-'''
-temperaturaMaxFermentado1 =
-	temperaturaMinFermentado1 =
-	temperaturaMaxFermentado2 =
-	temperaturaMinFermentado2 =
-	temperaturaMaxMadurado =
-	temperaturaMinMadurado =
-	temperaturaMaxClarificado =
-	temperaturaMinClarificado =
-	temperaturaMaxFinalizado = 
-	temperaturaMinFinalizado = 
-'''

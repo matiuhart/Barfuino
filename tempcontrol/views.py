@@ -21,6 +21,12 @@ def restart_mins(minutos=0):
 		nueva_fecha = fecha.strftime("%Y-%m-%d %H:%M:%S")
 		return nueva_fecha
 
+# Funcion para calculo de dias
+def sumar_dias(dias=0):
+		fecha = datetime.now() + timedelta(days=dias)
+		nueva_fecha = fecha.strftime("%Y-%m-%d %H:%M:%S")
+		return nueva_fecha
+
 # Vista para el home
 def home(request):
 	start_date = restart_mins(4320)
@@ -78,46 +84,47 @@ def procesosActivos(request):
 	activos = ControlProcesos.objects.filter(activo=True)
 	return render(request, 'activos.html', {'activos':activos})
 
+def post_new(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.published_date = timezone.now()
+            post.save()
+            return redirect('blog.views.post_detail', pk=post.pk)
+    else:
+        form = PostForm()
+    return render(request, 'blog/post_edit.html', {'form': form})
+
 
 def pruebas(request):
-	# Funcion para calculo de dias
-	def sumar_dias(dias=0):
-		fecha = datetime.now() + timedelta(days=dias)
-		nueva_fecha = fecha.strftime("%Y-%m-%d %H:%M:%S")
-		return nueva_fecha
-
-	if request.POST:
+	if request.method == "POST":
 		form = ControlPocesosCrearForm(request.POST)
 		if form.is_valid():
-			perfilNombre = request.GET['temperaturaPerfil']
-			fermentadorNombre = request.GET['fermentador']
-			coccionNumero = request.GET['coccionNum']
-
+			proceso = form.save(commit=False)
+			cd = form.cleaned_data
 			
-			perfilTablas = TemperaturasPerfiles.objects.get(nombre=perfilNombre)
-			fermentadorTablas = Fermentadores.objects.get(nombre=fermentadorNombre)
-			
-			# Calculo las fechas de finalizado de cada fase en base a dias especificados en TemperaturasPerfiles
-			finFermentado1 = sumar_dias(perfilTablas.diasFermentado1)
-			finFermentado2 = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2)
-			finMadurado = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2 + perfilTablas.diasMadurado)
-			finClarificado = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2 + 
-				perfilTablas.diasMadurado + perfilTablas.diasclarificado)
+			perfilTablas = TemperaturasPerfiles.objects.get(nombre=cd['temperaturaPerfil'])
+			fermentadorTablas = Fermentadores.objects.get(nombre=cd['fermentador'])
 
-			#Instancio para insersion en ControlProcesos
-			s=Sensores.objects.get(id=fermentadorTablas.sensor.id)
 			f=Fermentadores.objects.get(id=fermentadorTablas.id)
 			p=TemperaturasPerfiles.objects.get(id=perfilTablas.id)
 
-			#Actualizo Fermentadores.activo a True para que no sea mostrado nuevamente
-			Fermentadores.objects.filter(id=fermentadorTablas.id).update(activo=True)
-			
-			# Inserto los datos para nuevo proceso en ControlProcesos
-			ControlProcesos.objects.create(coccionNum=coccionNumero,fechaInicio=datetime.now(),fermentador=f,
-				sensor=s,temperaturaPerfil=p,activo=True,fermentado1Fin=finFermentado1,
-				fermentado2Fin=finFermentado2,maduradoFin=finMadurado,clarificadoFin=finClarificado)
+				
+			# Calculo las fechas de finalizado de cada fase en base a dias especificados en TemperaturasPerfiles
+			proceso.finFermentado1 = sumar_dias(perfilTablas.diasFermentado1)
+			proceso.finFermentado2 = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2)
+			proceso.finMadurado = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2 + perfilTablas.diasMadurado)
+			proceso.finClarificado = sumar_dias(perfilTablas.diasFermentado1 + perfilTablas.diasFermentado2 + 
+				perfilTablas.diasMadurado + perfilTablas.diasclarificado)
+			#proceso.fechaInicio=datetime.now()
+			proceso.fermentador = f
+			proceso.coccionNum = request.POST['coccionNum']
+			proceso.temperaturaPerfil = p
+			proceso.save()
 
-			form.save()
+						
 			return HttpResponseRedirect('home.html')
 	
 
