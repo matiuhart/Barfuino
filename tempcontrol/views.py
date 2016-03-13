@@ -29,7 +29,7 @@ def sumar_dias(dias=0):
 
 # Vista para el home
 def home(request):
-	start_date = restart_mins(4320)
+	start_date = restart_mins(43200000)
 	end_date = datetime.now()
 	
 	registrosTemperaturas = TemperaturasHistorial.objects.order_by('id').filter(fermentador__activo__exact=True).filter(fechaSensado__range=(start_date,end_date)).values()

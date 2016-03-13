@@ -40,6 +40,7 @@ class CambiarFase(object):
     ahora = timezone.make_aware(datetime.now())
     #ahora = datetime.now()
     temperaturas = ['']
+    ASUNTO = 'Notificacion de cambio de fase'
 
     def __init__(self,produccionEstadoId):
         self.estadoId = produccionEstadoId
@@ -65,6 +66,10 @@ class CambiarFase(object):
 
                 # Escribo la nueva temperatura en el puerto serie de arduino                
                 serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[2]))
+                
+                CUERPO = 'Se realiza cambio de fase a madurado en fermentador %s' %(CambiarFase.fermentadorNombre)
+                enviarCorreo(ASUNTO,CUERPO)
+
                 print('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[2]))
                 return "madurado"
             # Cambio a fermentado 2
@@ -73,8 +78,12 @@ class CambiarFase(object):
 
                 # Escribo la nueva temperatura en el puerto serie de arduino                
                 serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[1]))
+                
+                CUERPO = 'Se realiza cambio de fase a segundo fermentado en fermentador %s' %(CambiarFase.fermentadorNombre)
+                enviarCorreo(ASUNTO,CUERPO)
+
                 print('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[1]))
-            return "fermentado2"
+                return "fermentado2"
         #Mantengo fermentado 1
         else:
             serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[0]))
@@ -89,6 +98,10 @@ class CambiarFase(object):
 
                 # Escribo la nueva temperatura en el puerto serie de arduino   
                 serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[2]))
+
+                CUERPO = 'Se realiza cambio de fase a madurado en fermentador %s' %(CambiarFase.fermentadorNombre)
+                enviarCorreo(ASUNTO,CUERPO)                
+
                 print('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[2]))
                 return "madurado"
             # Mantengo fermentado 2
@@ -104,6 +117,10 @@ class CambiarFase(object):
             ControlProcesos.objects.filter(id=self.estadoId).update(fase="clarificado")
             try:
                 serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[3]))
+                
+                CUERPO = 'Se realiza cambio de fase a clarificado fermentado en fermentador %s' %(CambiarFase.fermentadorNombre)
+                enviarCorreo(ASUNTO,CUERPO)
+
                 print('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[3]))
             except:
                 serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.datosConfiguraciones.temperaturaClarificado))
@@ -121,6 +138,10 @@ class CambiarFase(object):
             ControlProcesos.objects.filter(id=self.estadoId).update(fase="finalizado")
             try:
                 serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[4]))
+                
+                CUERPO = 'Se realiza cambio de fase a finalizado en fermentador %s' %(CambiarFase.fermentadorNombre)
+                enviarCorreo(ASUNTO,CUERPO)
+
                 print('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[4]))
             except:
                 serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.datosConfiguraciones.temperaturaFinalizado))
@@ -140,7 +161,6 @@ class CambiarFase(object):
         try:
             serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[4]))
             print('s',str(CambiarFase.arduinoId),str(CambiarFase.temperaturas.split(",")[4]))
-
         except:
             serial_w('s',str(CambiarFase.arduinoId),str(CambiarFase.datosConfiguraciones.temperaturaFinalizado))
             print('s',str(CambiarFase.arduinoId),str(CambiarFase.datosConfiguraciones.temperaturaFinalizado))

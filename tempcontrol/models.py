@@ -86,6 +86,8 @@ class ControlProcesos(models.Model):
 	maduradoFin = models.DateTimeField(verbose_name='Madurado')
 	clarificadoFin = models.DateTimeField(verbose_name='Clarificado')
 	fase = models.CharField(max_length=15,default='fermentado1')
+	miManager = miManager()
+	objects = models.Manager()
 
 	class Meta:
 		ordering = ["fermentador"]
